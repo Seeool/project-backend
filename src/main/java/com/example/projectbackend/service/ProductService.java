@@ -11,6 +11,7 @@ public interface ProductService {
     ProductDTO read(Long pid);
     void update(ProductDTO productDTO);
     void delete(Long pid);
+    List<ProductDTO> getFeaturedList();
 
     default Product dtoToEntity(ProductDTO productDTO) {
         Product product = Product.builder()

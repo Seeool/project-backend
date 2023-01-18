@@ -2,6 +2,7 @@ package com.example.projectbackend.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
 
 import java.util.HashSet;
 import java.util.Set;

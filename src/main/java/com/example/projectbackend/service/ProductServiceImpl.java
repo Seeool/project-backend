@@ -8,7 +8,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -60,5 +62,12 @@ public class ProductServiceImpl implements ProductService {
     public void delete(Long pid) {
         reviewRepository.deleteByProduct_Pid(pid);
         productRepository.deleteById(pid);
+    }
+
+    @Override
+    public List<ProductDTO> getFeaturedList() {
+        List<Product> result = productRepository.findFirst12ByOrderBySalesVolumeDesc();
+        List<ProductDTO> dtoList = result.stream().map(product -> entityToDTO(product)).collect(Collectors.toList());
+        return dtoList;
     }
 }

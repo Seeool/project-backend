@@ -17,4 +17,9 @@ public class ProductController {
     public ResponseEntity<?> read(@PathVariable Long pid) {
         return ResponseEntity.ok(productService.read(pid));
     }
+
+    @GetMapping("/featuredList")
+    public ResponseEntity<?> featuredList() {
+        return ResponseEntity.ok(productService.getFeaturedList());
+    }
 }
