@@ -15,11 +15,31 @@ public class ProductController {
     private final ProductService productService;
     @GetMapping("/{pid}")
     public ResponseEntity<?> read(@PathVariable Long pid) {
-        return ResponseEntity.ok(productService.read(pid));
+        return ResponseEntity.ok(productService.readWithReviewAvg(pid));
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<?> list() {
+        return ResponseEntity.ok(productService.getProductAll());
     }
 
     @GetMapping("/featuredList")
     public ResponseEntity<?> featuredList() {
         return ResponseEntity.ok(productService.getFeaturedList());
+    }
+
+    @GetMapping("/latestList")
+    public ResponseEntity<?> latestList() {
+        return ResponseEntity.ok(productService.getOrderByRegDateDescList());
+    }
+
+    @GetMapping("/topRatedList")
+    public ResponseEntity<?> topRatedList() {
+        return ResponseEntity.ok(productService.getOrderByReviewAvgDescList());
+    }
+
+    @GetMapping("/discoutList")
+    public ResponseEntity<?> discountList() {
+        return ResponseEntity.ok(productService.getProductDiscount());
     }
 }

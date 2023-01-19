@@ -1,8 +1,6 @@
 package com.example.projectbackend.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
@@ -13,7 +11,8 @@ import lombok.*;
 @ToString
 public class ProductImage implements Comparable<ProductImage>{
     @Id
-    private String uuid;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String fileName;
     private int ord;
     @ManyToOne

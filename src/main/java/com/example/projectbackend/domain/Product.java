@@ -70,9 +70,8 @@ public class Product extends BaseEntity {
         this.text = text;
     }
 
-    public void addImage(String uuid, String fileName) {
+    public void addImage(String fileName) {
         ProductImage productImage = ProductImage.builder()
-                .uuid(uuid)
                 .fileName(fileName)
                 .product(this)
                 .ord(imageSet.size())
