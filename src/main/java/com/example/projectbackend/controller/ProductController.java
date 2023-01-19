@@ -3,10 +3,7 @@ package com.example.projectbackend.controller;
 import com.example.projectbackend.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/product")
@@ -17,10 +14,13 @@ public class ProductController {
     public ResponseEntity<?> read(@PathVariable Long pid) {
         return ResponseEntity.ok(productService.readWithReviewAvg(pid));
     }
-
     @GetMapping("/list")
-    public ResponseEntity<?> list() {
-        return ResponseEntity.ok(productService.getProductAll());
+    public ResponseEntity<?> list(@RequestParam String category) {
+        if(category.equals("null")) {
+            return ResponseEntity.ok(productService.getProductAll());
+        }else {
+            return ResponseEntity.ok(productService.getProductByCategory(Integer.parseInt(category)));
+        }
     }
 
     @GetMapping("/featuredList")
@@ -39,7 +39,11 @@ public class ProductController {
     }
 
     @GetMapping("/discoutList")
-    public ResponseEntity<?> discountList() {
-        return ResponseEntity.ok(productService.getProductDiscount());
+    public ResponseEntity<?> discountList(@RequestParam String category) {
+        if(category.equals("null")) {
+            return ResponseEntity.ok(productService.getProductDiscount());
+        }else {
+            return ResponseEntity.ok(productService.getProductDiscountByCategory(Integer.parseInt(category)));
+        }
     }
 }

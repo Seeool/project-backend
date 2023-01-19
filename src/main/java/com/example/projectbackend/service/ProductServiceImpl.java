@@ -73,33 +73,30 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDTO> getProductAll() {
         List<Product> result = productRepository.findAll(Sort.by("name").descending());
-        return result.stream().map(product -> entityToDTO(product)).collect(Collectors.toList());
+        return result.stream().map(this::entityToDTO).collect(Collectors.toList());
     }
 
     @Override
     public List<ProductDTO> getFeaturedList() {
         List<Product> result = productRepository.findFirst12ByOrderBySalesVolumeDesc();
-        List<ProductDTO> dtoList = result.stream().map(product -> entityToDTO(product)).collect(Collectors.toList());
-        return dtoList;
+        return result.stream().map(product -> entityToDTO(product)).collect(Collectors.toList());
     }
 
     @Override
     public List<ProductDTO> getOrderByRegDateDescList() {
         List<Product> result = productRepository.findFirst6ByOrderByRegDateDesc();
-        List<ProductDTO> dtoList = result.stream().map(product -> entityToDTO(product)).collect(Collectors.toList());
-        dtoList.stream().forEach(productDTO -> System.out.println(productDTO.getRegDate()));
+        List<ProductDTO> dtoList = result.stream().map(this::entityToDTO).collect(Collectors.toList());
         return dtoList;
     }
 
     @Override
     public List<ProductWithReviewAvgDTO> getOrderByReviewAvgDescList() {
         List<Object[]> result = productRepository.findFirst6ByOrderByReviewAvgDesc(PageRequest.of(0,6));
-        List<ProductWithReviewAvgDTO> dtoList = result.stream().map(objects -> {
+        return result.stream().map(objects -> {
             Product product = (Product) objects[0];
             Double reviewAvg = (Double) objects[1];
             return objectsToDTO(product, reviewAvg);
         }).collect(Collectors.toList());
-        return dtoList;
     }
 
     @Override
@@ -113,6 +110,18 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDTO> getProductDiscount() {
         List<Product> result = productRepository.findByDiscountIs(true);
-        return result.stream().map(product -> entityToDTO(product)).collect(Collectors.toList());
+        return result.stream().map(this::entityToDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductDTO> getProductByCategory(int category) {
+        List<Product> result = productRepository.findByCategoryIs(category);
+        return result.stream().map(this::entityToDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductDTO> getProductDiscountByCategory(int category) {
+        List<Product> result = productRepository.findByDiscountIsTrueAndCategoryIs(category);
+        return result.stream().map(this::entityToDTO).collect(Collectors.toList());
     }
 }

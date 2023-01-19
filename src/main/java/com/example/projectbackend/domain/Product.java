@@ -18,7 +18,7 @@ public class Product extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long pid;
 
-    private String category;
+    private int category;
     private String name;
     private int price;
     private int stock;
@@ -30,7 +30,7 @@ public class Product extends BaseEntity {
     private Set<ProductImage> imageSet = new HashSet<>();
 
     private boolean discount;
-    private Long dcRatio;
+    private int dcRatio;
     private int originPrice;
     private String text;
 
@@ -38,7 +38,7 @@ public class Product extends BaseEntity {
 //    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 //    private Set<Review> reviewSet = new HashSet<>();
 
-    public void changeCategory(String category) {
+    public void changeCategory(int category) {
         this.category = category;
     }
 
@@ -60,7 +60,7 @@ public class Product extends BaseEntity {
     public void changeDiscount(boolean discount) {
         this.discount = discount;
     }
-    public void changeDcRatio(Long dcRatio) {
+    public void changeDcRatio(int dcRatio) {
         this.dcRatio = dcRatio;
     }
     public void changeOriginPrice(int originPrice) {

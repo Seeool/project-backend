@@ -18,6 +18,8 @@ public interface ProductService {
     List<ProductWithReviewAvgDTO> getOrderByReviewAvgDescList();
     ProductWithReviewAvgDTO readWithReviewAvg(Long pid);
     List<ProductDTO> getProductDiscount();
+    List<ProductDTO> getProductByCategory(int category);
+    List<ProductDTO> getProductDiscountByCategory(int category);
 
     default Product dtoToEntity(ProductDTO productDTO) {
         Product product = Product.builder()

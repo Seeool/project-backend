@@ -57,12 +57,37 @@ class ProjectBackendApplicationTests {
 			int categoryNum = (int) (Math.random() * 10);
 			int priceNum = (int)(Math.random()*10000);
 			int imgNum = (int)(Math.random() * 11) + 1;
-			String[] categories = {"과일","정육","밀키트","간편식","통조림","쌀","베이커리","장","우유","채소","건강식품"};
+			String[] categories = {"과일","정육/계란","밀키트","냉장/냉동/간편식","통조림/즉석밥/면","쌀/잡곡","베이커리","장/양념/소스","우유/유제품","채소","건강식품"};
 			Product product = Product.builder()
-					.category(categories[categoryNum])
-					.name(categories[categoryNum]+" 더미 상품"+i)
+					.category(categoryNum)
+					.name(categories[categoryNum]+" 더미"+i)
 					.price(priceNum)
 					.discount(false)
+					.text("이 상품은...."+i)
+					.origin("부산")
+					.stock(1000)
+					.salesVolume(priceNum)
+					.build();
+			product.addImage("/img/product/product-"+imgNum+".jpg");
+			productRepository.save(product);
+		});
+	}
+
+	@Test
+	void insertDummyDiscountProduct() {
+		IntStream.rangeClosed(1,20).forEach(i -> {
+			int dcRatio = (int) (Math.random() * 70) + 20;
+			int categoryNum = (int) (Math.random() * 10) + 1;
+			int priceNum = (int)(Math.random()*10000);
+			int imgNum = (int)(Math.random() * 11) + 1;
+			String[] categories = {"과일","정육/계란","밀키트","냉장/냉동/간편식","통조림/즉석밥/면","쌀/잡곡","베이커리","장/양념/소스","우유/유제품","채소","건강식품"};
+			Product product = Product.builder()
+					.category(categoryNum)
+					.name(categories[categoryNum]+" 할인 더미"+i)
+					.discount(true)
+					.dcRatio(dcRatio)
+					.originPrice(priceNum)
+					.price(priceNum * (100 - dcRatio) / 100)
 					.text("이 상품은...."+i)
 					.origin("부산")
 					.stock(1000)
@@ -96,7 +121,7 @@ class ProjectBackendApplicationTests {
 
 	@Test
 	void searchByCategory() {
-		List<Product> list = productRepository.findByCategoryIsContainingIgnoreCase("통조림");
+		List<Product> list = productRepository.findByCategoryIs (1);
 		list.forEach(product -> System.out.println(product));
 	}
 

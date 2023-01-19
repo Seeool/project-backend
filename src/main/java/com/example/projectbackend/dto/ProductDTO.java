@@ -21,7 +21,7 @@ import java.util.Set;
 public class ProductDTO {
 
     private Long pid;
-    private String category;
+    private int category;
     private String name;
 
     private int price;
@@ -30,7 +30,7 @@ public class ProductDTO {
     private String origin;
     private List<String> fileNames;
     private boolean discount;
-    private Long dcRatio;
+    private int dcRatio;
     private int originPrice;
     private String text;
     private LocalDateTime regDate, modDate;
