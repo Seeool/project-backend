@@ -2,6 +2,8 @@ package com.example.projectbackend.service;
 
 import com.example.projectbackend.domain.Product;
 import com.example.projectbackend.domain.ProductImage;
+import com.example.projectbackend.dto.PageRequestDTO;
+import com.example.projectbackend.dto.PageResponseDTO;
 import com.example.projectbackend.dto.ProductDTO;
 import com.example.projectbackend.dto.ProductWithReviewAvgDTO;
 import com.example.projectbackend.repository.ProductRepository;
@@ -9,6 +11,7 @@ import com.example.projectbackend.repository.ReviewRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -124,4 +127,41 @@ public class ProductServiceImpl implements ProductService {
         List<Product> result = productRepository.findByDiscountIsTrueAndCategoryIs(category);
         return result.stream().map(this::entityToDTO).collect(Collectors.toList());
     }
+
+    @Override
+    public List<ProductDTO> getProductWithQueryDsl(PageRequestDTO pageRequestDTO) {
+        String category = pageRequestDTO.getCategory();
+        String keyword = pageRequestDTO.getKeyword();
+        String sort = pageRequestDTO.getSort();
+        List<Product> result = productRepository.searchProduct(category, keyword, sort);
+        List<ProductDTO> dtoList = result.stream().map(this::entityToDTO).collect(Collectors.toList());
+        return dtoList;
+    }
+
+
+    @Override
+    public List<ProductDTO> getProductDiscountWithQueryDsl(PageRequestDTO pageRequestDTO) {
+        String category = pageRequestDTO.getCategory();
+        String keyword = pageRequestDTO.getKeyword();
+        List<Product> result = productRepository.searchProductDiscount(category, keyword);
+        List<ProductDTO> dtoList = result.stream().map(this::entityToDTO).collect(Collectors.toList());
+        return dtoList;
+    }
+
+    @Override
+    public PageResponseDTO<ProductDTO> getProductPagingWithQueryDsl(PageRequestDTO pageRequestDTO) {
+        System.out.println("페이징dsl 서비스 메서드 실행");
+        String category = pageRequestDTO.getCategory();
+        String keyword = pageRequestDTO.getKeyword();
+        String sort = pageRequestDTO.getSort();
+
+        Pageable pageable = pageRequestDTO.getPageable(sort);
+
+        Page<ProductDTO> result = productRepository.searchProductPaging(category, keyword, pageable);
+
+        List<ProductDTO> dtoList = result.getContent();
+
+        return new PageResponseDTO<>(pageRequestDTO, dtoList, (int) result.getTotalElements());
+    }
+
 }

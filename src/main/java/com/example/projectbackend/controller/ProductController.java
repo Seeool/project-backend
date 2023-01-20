@@ -1,8 +1,10 @@
 package com.example.projectbackend.controller;
 
+import com.example.projectbackend.dto.PageRequestDTO;
 import com.example.projectbackend.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,13 +16,15 @@ public class ProductController {
     public ResponseEntity<?> read(@PathVariable Long pid) {
         return ResponseEntity.ok(productService.readWithReviewAvg(pid));
     }
+//    @GetMapping("/list")
+//    public ResponseEntity<?> list(PageRequestDTO pageRequestDTO) {
+//        System.out.println(pageRequestDTO);
+//        return ResponseEntity.ok(productService.getProductWithQueryDsl(pageRequestDTO));
+//    }
     @GetMapping("/list")
-    public ResponseEntity<?> list(@RequestParam String category) {
-        if(category.equals("null")) {
-            return ResponseEntity.ok(productService.getProductAll());
-        }else {
-            return ResponseEntity.ok(productService.getProductByCategory(Integer.parseInt(category)));
-        }
+    public ResponseEntity<?> list(PageRequestDTO pageRequestDTO) {
+        System.out.println(pageRequestDTO);
+        return ResponseEntity.ok(productService.getProductPagingWithQueryDsl(pageRequestDTO));
     }
 
     @GetMapping("/featuredList")
@@ -39,11 +43,7 @@ public class ProductController {
     }
 
     @GetMapping("/discoutList")
-    public ResponseEntity<?> discountList(@RequestParam String category) {
-        if(category.equals("null")) {
-            return ResponseEntity.ok(productService.getProductDiscount());
-        }else {
-            return ResponseEntity.ok(productService.getProductDiscountByCategory(Integer.parseInt(category)));
-        }
+    public ResponseEntity<?> discountList(PageRequestDTO pageRequestDTO) {
+        return ResponseEntity.ok(productService.getProductDiscountWithQueryDsl(pageRequestDTO));
     }
 }

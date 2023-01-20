@@ -52,9 +52,9 @@ class ProjectBackendApplicationTests {
 
 	@Test
 	void insertDummyProduct() {
-		IntStream.rangeClosed(1,100).forEach(i -> {
+		IntStream.rangeClosed(1,200).forEach(i -> {
 
-			int categoryNum = (int) (Math.random() * 10);
+			int categoryNum = (int) (Math.random() * 11);
 			int priceNum = (int)(Math.random()*10000);
 			int imgNum = (int)(Math.random() * 11) + 1;
 			String[] categories = {"과일","정육/계란","밀키트","냉장/냉동/간편식","통조림/즉석밥/면","쌀/잡곡","베이커리","장/양념/소스","우유/유제품","채소","건강식품"};
@@ -77,7 +77,7 @@ class ProjectBackendApplicationTests {
 	void insertDummyDiscountProduct() {
 		IntStream.rangeClosed(1,20).forEach(i -> {
 			int dcRatio = (int) (Math.random() * 70) + 20;
-			int categoryNum = (int) (Math.random() * 10) + 1;
+			int categoryNum = (int) (Math.random() * 11);
 			int priceNum = (int)(Math.random()*10000);
 			int imgNum = (int)(Math.random() * 11) + 1;
 			String[] categories = {"과일","정육/계란","밀키트","냉장/냉동/간편식","통조림/즉석밥/면","쌀/잡곡","베이커리","장/양념/소스","우유/유제품","채소","건강식품"};

@@ -1,6 +1,8 @@
 package com.example.projectbackend.service;
 
 import com.example.projectbackend.domain.Product;
+import com.example.projectbackend.dto.PageRequestDTO;
+import com.example.projectbackend.dto.PageResponseDTO;
 import com.example.projectbackend.dto.ProductDTO;
 import com.example.projectbackend.dto.ProductWithReviewAvgDTO;
 
@@ -20,7 +22,9 @@ public interface ProductService {
     List<ProductDTO> getProductDiscount();
     List<ProductDTO> getProductByCategory(int category);
     List<ProductDTO> getProductDiscountByCategory(int category);
-
+    List<ProductDTO> getProductWithQueryDsl(PageRequestDTO pageRequestDTO);
+    PageResponseDTO<ProductDTO> getProductPagingWithQueryDsl(PageRequestDTO pageRequestDTO);
+    List<ProductDTO> getProductDiscountWithQueryDsl(PageRequestDTO pageRequestDTO);
     default Product dtoToEntity(ProductDTO productDTO) {
         Product product = Product.builder()
                 .pid(productDTO.getPid())

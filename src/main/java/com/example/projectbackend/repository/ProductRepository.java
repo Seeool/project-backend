@@ -2,6 +2,7 @@ package com.example.projectbackend.repository;
 
 import com.example.projectbackend.domain.Product;
 import com.example.projectbackend.dto.ProductDTO;
+import com.example.projectbackend.repository.search.ProductSearch;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public interface ProductRepository extends JpaRepository<Product, Long> {
+public interface ProductRepository extends JpaRepository<Product, Long>, ProductSearch {
     List<Product> findFirst6ByOrderByRegDateDesc();
     //등록 최신순으로 6상품 찾기
     
