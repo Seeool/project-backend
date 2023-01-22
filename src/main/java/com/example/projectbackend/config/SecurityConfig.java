@@ -21,7 +21,7 @@ public class SecurityConfig {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeHttpRequests().requestMatchers("/**").permitAll();
-        http.cors(httpSecurityCorsConfigurer -> corsConfigurationSource());
+//        http.cors(httpSecurityCorsConfigurer -> corsConfigurationSource());
 
         return http.build();
     }
