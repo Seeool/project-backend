@@ -24,7 +24,7 @@ public class ProductController {
     @GetMapping("/list")
     public ResponseEntity<?> list(PageRequestDTO pageRequestDTO) {
         System.out.println(pageRequestDTO);
-        return ResponseEntity.ok(productService.getProductPagingWithQueryDsl(pageRequestDTO));
+        return ResponseEntity.ok(productService.getProductsPagination(pageRequestDTO));
     }
 
     @GetMapping("/featuredList")
@@ -44,6 +44,6 @@ public class ProductController {
 
     @GetMapping("/discoutList")
     public ResponseEntity<?> discountList(PageRequestDTO pageRequestDTO) {
-        return ResponseEntity.ok(productService.getProductDiscountWithQueryDsl(pageRequestDTO));
+        return ResponseEntity.ok(productService.getProductsDiscount(pageRequestDTO));
     }
 }

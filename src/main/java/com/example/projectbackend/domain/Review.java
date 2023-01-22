@@ -13,9 +13,9 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rno;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Product product;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
     private String text;
     private Long grade;

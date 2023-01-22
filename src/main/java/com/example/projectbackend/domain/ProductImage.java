@@ -8,7 +8,7 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@ToString(exclude = "product")
 public class ProductImage implements Comparable<ProductImage>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

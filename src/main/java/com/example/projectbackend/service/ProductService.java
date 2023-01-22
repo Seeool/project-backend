@@ -1,6 +1,7 @@
 package com.example.projectbackend.service;
 
 import com.example.projectbackend.domain.Product;
+import com.example.projectbackend.domain.ProductImage;
 import com.example.projectbackend.dto.PageRequestDTO;
 import com.example.projectbackend.dto.PageResponseDTO;
 import com.example.projectbackend.dto.ProductDTO;
@@ -14,17 +15,12 @@ public interface ProductService {
     ProductDTO read(Long pid);
     void update(ProductDTO productDTO);
     void delete(Long pid);
-    List<ProductDTO> getProductAll();
     List<ProductDTO> getFeaturedList();
     List<ProductDTO> getOrderByRegDateDescList();
     List<ProductWithReviewAvgDTO> getOrderByReviewAvgDescList();
     ProductWithReviewAvgDTO readWithReviewAvg(Long pid);
-    List<ProductDTO> getProductDiscount();
-    List<ProductDTO> getProductByCategory(int category);
-    List<ProductDTO> getProductDiscountByCategory(int category);
-    List<ProductDTO> getProductWithQueryDsl(PageRequestDTO pageRequestDTO);
-    PageResponseDTO<ProductDTO> getProductPagingWithQueryDsl(PageRequestDTO pageRequestDTO);
-    List<ProductDTO> getProductDiscountWithQueryDsl(PageRequestDTO pageRequestDTO);
+    PageResponseDTO<ProductDTO> getProductsPagination(PageRequestDTO pageRequestDTO);
+    List<ProductDTO> getProductsDiscount(PageRequestDTO pageRequestDTO);
     default Product dtoToEntity(ProductDTO productDTO) {
         Product product = Product.builder()
                 .pid(productDTO.getPid())
@@ -86,8 +82,32 @@ public interface ProductService {
                 .modDate(product.getModDate())
                 .reviewAvg(reviewAvg)
                 .build();
-
         List<String> fileNames = product.getImageSet().stream().sorted().map(productImage ->
+                productImage.getFileName()).collect(Collectors.toList());
+        productWithReviewAvgDTO.setFileNames(fileNames);
+
+        return productWithReviewAvgDTO;
+    }
+
+    default ProductWithReviewAvgDTO objectsToDTO2(Product product, List<ProductImage> productImageList, Double reviewAvg, Long reviewCount) {
+        ProductWithReviewAvgDTO productWithReviewAvgDTO = ProductWithReviewAvgDTO.builder()
+                .pid(product.getPid())
+                .category(product.getCategory())
+                .name(product.getName())
+                .price(product.getPrice())
+                .discount(product.isDiscount())
+                .dcRatio(product.getDcRatio())
+                .originPrice(product.getOriginPrice())
+                .text(product.getText())
+                .origin(product.getOrigin())
+                .stock(product.getStock())
+                .salesVolume(product.getSalesVolume())
+                .regDate(product.getRegDate())
+                .modDate(product.getModDate())
+                .reviewAvg(reviewAvg)
+                .reviewCount(reviewCount)
+                .build();
+        List<String> fileNames = productImageList.stream().sorted().map(productImage ->
                 productImage.getFileName()).collect(Collectors.toList());
         productWithReviewAvgDTO.setFileNames(fileNames);
 

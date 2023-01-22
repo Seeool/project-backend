@@ -27,4 +27,5 @@ public class ProductWithReviewAvgDTO {
     private String text;
     private LocalDateTime regDate, modDate;
     private Double reviewAvg;
+    private Long reviewCount;
 }

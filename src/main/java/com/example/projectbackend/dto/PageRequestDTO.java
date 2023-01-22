@@ -31,6 +31,8 @@ public class PageRequestDTO {
     }
     public Pageable getPageable(String sort) {
         switch (sort) {
+            case "" :
+                return PageRequest.of(this.page - 1, this.size, Sort.by("salesVolume").descending());
             case "0" :
                 return PageRequest.of(this.page - 1, this.size, Sort.by("salesVolume").descending());
             case "1" :

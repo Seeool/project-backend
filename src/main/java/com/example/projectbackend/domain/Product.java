@@ -12,7 +12,8 @@ import java.util.Set;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"imageSet", "reviewSet"})
+@ToString
+//@ToString(exclude = {"imageSet", "reviewSet"})
 public class Product extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +34,7 @@ public class Product extends BaseEntity {
     private int dcRatio;
     private int originPrice;
     private String text;
+
 
 //    @Builder.Default
 //    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)

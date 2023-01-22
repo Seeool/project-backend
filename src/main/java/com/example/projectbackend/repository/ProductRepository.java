@@ -27,17 +27,17 @@ public interface ProductRepository extends JpaRepository<Product, Long>, Product
     
     List<Product> findByDiscountIsTrueAndCategoryIs(int category);
     //할인 중인 상품 중 특정 카테고리 상품 찾기
-    
-
+    @EntityGraph(attributePaths = "imageSet")
     @Query("select p, avg(coalesce(r.grade,0)) from Product p left join Review r on r.product = p group by p order by avg(coalesce(r.grade,0)) desc, p.salesVolume desc")
     List<Object[]> findFirst6ByOrderByReviewAvgDesc(Pageable pageable);
-    //리뷰 평균 점수가 높은 순으로 Pageable에 정의된 수만큼 상품 찾기
+    //리뷰 평균 점수가 높은 순으로 Pageable에 정의된 수만큼 상품 찾기, Group by Product --> 이미지 맨앞꺼 한장만 가져옴, EntityGraph를 이용해 N+1 해결,
 
     List<Product> findFirst12ByOrderBySalesVolumeDesc();
-    //판매량(인기)가 많은 순으로 18상품 찾기
-    @EntityGraph(attributePaths = "imageSet")
-    @Query("select p, avg(coalesce(r.grade,0)) from Product p left join Review r on r.product = p where p.pid = :pid")
+    //판매량(인기)가 많은 순으로 12상품 찾기
+
+
+    @Query("select p, pi, avg(coalesce(r.grade,0)), count(distinct r) from Product p left join ProductImage pi on pi.product = p left join Review r on r.product = p where p.pid = :pid group by pi")
     List<Object[]> findOneWithReviewAvg(@Param("pid") Long pid);
-    //Object[]는 Optional이 아니라 List로
+    //Object[]는 Optional이 아니라 List로,, 모든 이미지 다 가져오기
 
 }

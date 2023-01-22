@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -73,11 +74,6 @@ public class ProductServiceImpl implements ProductService {
         reviewRepository.deleteByProduct_Pid(pid);
         productRepository.deleteById(pid);
     }
-    @Override
-    public List<ProductDTO> getProductAll() {
-        List<Product> result = productRepository.findAll(Sort.by("name").descending());
-        return result.stream().map(this::entityToDTO).collect(Collectors.toList());
-    }
 
     @Override
     public List<ProductDTO> getFeaturedList() {
@@ -106,41 +102,21 @@ public class ProductServiceImpl implements ProductService {
     public ProductWithReviewAvgDTO readWithReviewAvg(Long pid) {
         List<Object[]> result = productRepository.findOneWithReviewAvg(pid);
         Product product = (Product) result.get(0)[0];
-        Double reviewAvg = (Double) result.get(0)[1];
-        return objectsToDTO(product, reviewAvg);
-    }
 
-    @Override
-    public List<ProductDTO> getProductDiscount() {
-        List<Product> result = productRepository.findByDiscountIs(true);
-        return result.stream().map(this::entityToDTO).collect(Collectors.toList());
-    }
+        List<ProductImage> productImages = new ArrayList<>();
+        result.forEach(object -> {
+            ProductImage productImage = (ProductImage) object[1];
+            productImages.add(productImage);
+        });
 
-    @Override
-    public List<ProductDTO> getProductByCategory(int category) {
-        List<Product> result = productRepository.findByCategoryIs(category);
-        return result.stream().map(this::entityToDTO).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<ProductDTO> getProductDiscountByCategory(int category) {
-        List<Product> result = productRepository.findByDiscountIsTrueAndCategoryIs(category);
-        return result.stream().map(this::entityToDTO).collect(Collectors.toList());
-    }
-
-    @Override
-    public List<ProductDTO> getProductWithQueryDsl(PageRequestDTO pageRequestDTO) {
-        String category = pageRequestDTO.getCategory();
-        String keyword = pageRequestDTO.getKeyword();
-        String sort = pageRequestDTO.getSort();
-        List<Product> result = productRepository.searchProduct(category, keyword, sort);
-        List<ProductDTO> dtoList = result.stream().map(this::entityToDTO).collect(Collectors.toList());
-        return dtoList;
+        Double reviewAvg = (Double) result.get(0)[2];
+        Long reviewCount = (Long) result.get(0)[3];
+        return objectsToDTO2(product, productImages, reviewAvg, reviewCount);
     }
 
 
     @Override
-    public List<ProductDTO> getProductDiscountWithQueryDsl(PageRequestDTO pageRequestDTO) {
+    public List<ProductDTO> getProductsDiscount(PageRequestDTO pageRequestDTO) {
         String category = pageRequestDTO.getCategory();
         String keyword = pageRequestDTO.getKeyword();
         List<Product> result = productRepository.searchProductDiscount(category, keyword);
@@ -149,7 +125,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public PageResponseDTO<ProductDTO> getProductPagingWithQueryDsl(PageRequestDTO pageRequestDTO) {
+    public PageResponseDTO<ProductDTO> getProductsPagination(PageRequestDTO pageRequestDTO) {
         System.out.println("페이징dsl 서비스 메서드 실행");
         String category = pageRequestDTO.getCategory();
         String keyword = pageRequestDTO.getKeyword();
