@@ -117,11 +117,12 @@ class ProjectBackendApplicationTests {
         IntStream.rangeClosed(1, 2500).forEach(i -> {
             long grade = (long) (Math.random() * 5);
             int pid = (int) (Math.random() * 119) + 1;
+            int mno = (int) (Math.random() * 99) + 1;
             Product product = Product.builder()
                     .pid((long) pid)
                     .build();
             Member member = Member.builder()
-                    .id("test1")
+                    .id("test"+mno)
                     .build();
             Review review = Review.builder()
                     .grade(grade)
