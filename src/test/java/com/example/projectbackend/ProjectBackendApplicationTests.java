@@ -57,10 +57,10 @@ class ProjectBackendApplicationTests {
 
             int categoryNum = (int) (Math.random() * 11);
             int priceNum = (int) (Math.random() * 10000);
-            int imgNum1 = (int) (Math.random() * 11) + 1;
-            int imgNum2 = (int) (Math.random() * 11) + 1;
-            int imgNum3 = (int) (Math.random() * 11) + 1;
-            int imgNum4 = (int) (Math.random() * 11) + 1;
+            int imgNum1 = (int) (Math.random() * 12) + 1;
+            int imgNum2 = (int) (Math.random() * 12) + 1;
+            int imgNum3 = (int) (Math.random() * 12) + 1;
+            int imgNum4 = (int) (Math.random() * 12) + 1;
             String[] categories = {"과일", "정육/계란", "밀키트", "냉장/냉동/간편식", "통조림/즉석밥/면", "쌀/잡곡", "베이커리", "장/양념/소스", "우유/유제품", "채소", "건강식품"};
             Product product = Product.builder()
                     .category(categoryNum)
@@ -86,10 +86,10 @@ class ProjectBackendApplicationTests {
             int dcRatio = (int) (Math.random() * 70) + 20;
             int categoryNum = (int) (Math.random() * 11);
             int priceNum = (int) (Math.random() * 10000);
-            int imgNum1 = (int) (Math.random() * 11) + 1;
-            int imgNum2 = (int) (Math.random() * 11) + 1;
-            int imgNum3 = (int) (Math.random() * 11) + 1;
-            int imgNum4 = (int) (Math.random() * 11) + 1;
+            int imgNum1 = (int) (Math.random() * 12) + 1;
+            int imgNum2 = (int) (Math.random() * 12) + 1;
+            int imgNum3 = (int) (Math.random() * 12) + 1;
+            int imgNum4 = (int) (Math.random() * 12) + 1;
             String[] categories = {"과일", "정육/계란", "밀키트", "냉장/냉동/간편식", "통조림/즉석밥/면", "쌀/잡곡", "베이커리", "장/양념/소스", "우유/유제품", "채소", "건강식품"};
             Product product = Product.builder()
                     .category(categoryNum)
@@ -115,8 +115,8 @@ class ProjectBackendApplicationTests {
     void insertDummyReviews() {
         IntStream.rangeClosed(1, 2500).forEach(i -> {
             long grade = (long) (Math.random() * 5);
-            int pid = (int) (Math.random() * 119) + 1;
-            int mno = (int) (Math.random() * 99) + 1;
+            int pid = (int) (Math.random() * 120) + 1;
+            int mno = (int) (Math.random() * 100) + 1;
             Product product = Product.builder()
                     .pid((long) pid)
                     .build();
@@ -136,9 +136,9 @@ class ProjectBackendApplicationTests {
     @Test
     void insertDummyBlogs() {
         IntStream.rangeClosed(1,100).forEach(i -> {
-            int categoryNum = (int) (Math.random() * 3);
-            int mno = (int) (Math.random() * 99) + 1;
-            int imgNum = (int) (Math.random() * 5) + 1;
+            int categoryNum = (int) (Math.random() * 4);
+            int mno = (int) (Math.random() * 100) + 1;
+            int imgNum = (int) (Math.random() * 6) + 1;
             Member member = Member.builder()
                     .id("test"+mno)
                     .build();
@@ -156,8 +156,8 @@ class ProjectBackendApplicationTests {
     @Test
     void insertDummyReplys() {
         IntStream.rangeClosed(1, 2500).forEach(i -> {
-            int bid = (int) (Math.random() * 99) + 1;
-            int mno = (int) (Math.random() * 99) + 1;
+            int bid = (int) (Math.random() * 100) + 1;
+            int mno = (int) (Math.random() * 100) + 1;
             Blog blog = Blog.builder()
                     .bid((long) bid)
                     .build();
