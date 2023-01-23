@@ -90,7 +90,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductWithReviewAvgDTO> getOrderByReviewAvgDescList() {
-        List<Object[]> result = productRepository.findFirst6ByOrderByReviewAvgDesc(PageRequest.of(0,6));
+        List<Object[]> result = productRepository.findFirst6ByOrderByReviewAvgDesc();
         return result.stream().map(objects -> {
             Product product = (Product) objects[0];
             Double reviewAvg = (Double) objects[1];
@@ -127,11 +127,22 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public PageResponseDTO<ProductDTO> getProductsPagination(PageRequestDTO pageRequestDTO) {
         System.out.println("페이징dsl 서비스 메서드 실행");
-        String category = pageRequestDTO.getCategory();
+        String category = pageRequestDTO.getCategory(); //String인 이유는 쿼리스트링에 있는 변수는 무조건 String으로 가져오기 때문
         String keyword = pageRequestDTO.getKeyword();
         String sort = pageRequestDTO.getSort();
 
-        Pageable pageable = pageRequestDTO.getPageable(sort);
+        Pageable pageable = null;
+        pageRequestDTO.getPageableDesc("salesVolume");
+
+        switch (sort) {
+            case "" -> pageable = pageRequestDTO.getPageableDesc("salesVolume");
+            case "0" -> pageable = pageRequestDTO.getPageableDesc("salesVolume");
+            case "1" -> pageable = pageRequestDTO.getPageableAsc("salesVolume");
+            case "2" -> pageable = pageRequestDTO.getPageableDesc("price");
+            case "3" -> pageable = pageRequestDTO.getPageableAsc("price");
+            case "4" -> pageable = pageRequestDTO.getPageableDesc("regDate");
+            case "5" -> pageable = pageRequestDTO.getPageableAsc("regDate");
+        }
 
         Page<ProductDTO> result = productRepository.searchProductPaging(category, keyword, pageable);
 

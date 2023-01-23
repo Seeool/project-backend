@@ -8,17 +8,15 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = {"member", "product"})
-public class Review extends BaseEntity{
+@ToString(exclude = {"member", "blog"})
+public class Reply extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long reviewNo;
+    private Long replyNO;
     @ManyToOne(fetch = FetchType.LAZY)
-    private Product product;
+    private Blog blog;
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
     private String text;
-    private Long grade;
-
 
 }

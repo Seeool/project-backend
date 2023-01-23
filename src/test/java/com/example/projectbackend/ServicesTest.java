@@ -30,12 +30,6 @@ public class ServicesTest {
     private ReviewService reviewService;
 
     @Test
-    void RepositoryReadTest1() {
-        List<Object[]> result = productRepository.findFirst6ByOrderByReviewAvgDesc(PageRequest.of(0,6));
-
-    }
-
-    @Test
     @Transactional
     void RepositoryReadTest2() {
         List<Object[]> result = productRepository.findOneWithReviewAvg(1L);

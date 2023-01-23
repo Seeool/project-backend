@@ -1,7 +1,8 @@
 package com.example.projectbackend.dto;
 
+import com.example.projectbackend.domain.Blog;
 import com.example.projectbackend.domain.Member;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,12 +14,10 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BlogDTO {
-    private long bid;
-    private int category;
-    private String title;
+public class ReplyDTO {
+    private Long replyNO;
+    private Long bid;
+    private Long mid;
     private String text;
-    private String mid;
-    private String fileName;
     private LocalDateTime regDate, modDate;
 }

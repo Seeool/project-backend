@@ -1,7 +1,5 @@
 package com.example.projectbackend.dto;
 
-import com.example.projectbackend.domain.Member;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,7 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class BlogDTO {
+public class BlogWithReplyCountDTO {
     private long bid;
     private int category;
     private String title;
@@ -21,4 +19,6 @@ public class BlogDTO {
     private String mid;
     private String fileName;
     private LocalDateTime regDate, modDate;
+    private Long replyCount;
+
 }

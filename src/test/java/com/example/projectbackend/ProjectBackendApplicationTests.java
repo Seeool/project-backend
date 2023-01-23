@@ -2,10 +2,7 @@ package com.example.projectbackend;
 
 import com.example.projectbackend.domain.*;
 import com.example.projectbackend.dto.ProductDTO;
-import com.example.projectbackend.repository.BlogRepository;
-import com.example.projectbackend.repository.MemberRepository;
-import com.example.projectbackend.repository.ProductRepository;
-import com.example.projectbackend.repository.ReviewRepository;
+import com.example.projectbackend.repository.*;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +25,8 @@ class ProjectBackendApplicationTests {
     private ProductRepository productRepository;
     @Autowired
     private ReviewRepository reviewRepository;
+    @Autowired
+    private ReplyRepository replyRepository;
 
 
     @Test
@@ -135,6 +134,46 @@ class ProjectBackendApplicationTests {
     }
 
     @Test
+    void insertDummyBlogs() {
+        IntStream.rangeClosed(1,100).forEach(i -> {
+            int categoryNum = (int) (Math.random() * 3);
+            int mno = (int) (Math.random() * 99) + 1;
+            int imgNum = (int) (Math.random() * 5) + 1;
+            Member member = Member.builder()
+                    .id("test"+mno)
+                    .build();
+            Blog blog = Blog.builder()
+                    .title("더미 블로그 제목.."+i)
+                    .text("테스트용 내용"+i)
+                    .category(categoryNum)
+                    .member(member)
+                    .fileName("/img/blog/blog-" + imgNum + ".jpg")
+                    .build();
+            blogRepository.save(blog);
+        });
+    }
+
+    @Test
+    void insertDummyReplys() {
+        IntStream.rangeClosed(1, 2500).forEach(i -> {
+            int bid = (int) (Math.random() * 99) + 1;
+            int mno = (int) (Math.random() * 99) + 1;
+            Blog blog = Blog.builder()
+                    .bid((long) bid)
+                    .build();
+            Member member = Member.builder()
+                    .id("test"+mno)
+                    .build();
+            Reply reply = Reply.builder()
+                    .text("이 상품 평가는..." + i)
+                    .member(member)
+                    .blog(blog)
+                    .build();
+            replyRepository.save(reply);
+        });
+    }
+
+    @Test
     void searchByCategory() {
         List<Product> list = productRepository.findByCategoryIs(1);
         list.forEach(product -> System.out.println(product));
@@ -154,7 +193,7 @@ class ProjectBackendApplicationTests {
 
     @Test
     void searchByavgGrade() {
-        List<Object[]> list = productRepository.findFirst6ByOrderByReviewAvgDesc(PageRequest.of(0, 6));
+        List<Object[]> list = productRepository.findFirst6ByOrderByReviewAvgDesc();
         list.forEach(arr -> {
             Product product = (Product) arr[0];
             Double reviewAvg = (Double) arr[1];
@@ -182,4 +221,20 @@ class ProjectBackendApplicationTests {
 //        List<Review> result = reviewRepository.findReviewsByProduct_Pid(1L);
 //        System.out.println(result);
 //    }
+
+    @Test
+    void find3blogsTest() {
+        List<Object[]> result = blogRepository.findFirst3ByOrderByRegDateDescWithReplyCount();
+        result.stream().forEach(System.out::println);
+    }
+
+    @Test
+    void findBlogCountByCategoryTest() {
+        System.out.println(blogRepository.countBlogByCategoryIs(0));
+    }
+
+    @Test
+    void findBlogCountTest() {
+        System.out.println(blogRepository.count());
+    }
 }

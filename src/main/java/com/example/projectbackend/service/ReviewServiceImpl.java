@@ -25,7 +25,7 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public PageResponseDTO<ReviewDTO> getReviewsByPid(Long pid, PageRequestDTO pageRequestDTO) {
 
-        Pageable pageable = PageRequest.of(pageRequestDTO.getPage() <= 0 ? 0 : pageRequestDTO.getPage() - 1, pageRequestDTO.getSize(), Sort.by("rno").descending());
+        Pageable pageable = PageRequest.of(pageRequestDTO.getPage() <= 0 ? 0 : pageRequestDTO.getPage() - 1, pageRequestDTO.getSize(), Sort.by("reviewNo").descending());
 
         Page<Review> reviews = reviewRepository.findReviewsByPid(pid, pageable);
         List<ReviewDTO> dtoList = reviews.stream().map(this::entityToDTO).collect(Collectors.toList());

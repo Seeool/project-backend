@@ -14,11 +14,13 @@ public interface ReviewService {
 
     default ReviewDTO entityToDTO(Review review) {
         ReviewDTO reviewDTO = ReviewDTO.builder()
-                .rno(review.getRno())
+                .reviewNo(review.getReviewNo())
                 .mid(review.getMember().getId())
                 .pid(review.getProduct().getPid())
                 .grade(review.getGrade())
                 .text(review.getText())
+                .regDate(review.getRegDate())
+                .modDate(review.getModDate())
                 .build();
         return reviewDTO;
     }
@@ -32,7 +34,7 @@ public interface ReviewService {
                 .build();
 
         Review review = Review.builder()
-                .rno(reviewDTO.getRno())
+                .reviewNo(reviewDTO.getReviewNo())
                 .member(member)
                 .product(product)
                 .grade(reviewDTO.getGrade())

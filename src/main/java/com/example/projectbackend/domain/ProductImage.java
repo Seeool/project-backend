@@ -13,6 +13,7 @@ public class ProductImage implements Comparable<ProductImage>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String fileName;
     private int ord;
     @ManyToOne

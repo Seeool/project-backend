@@ -38,25 +38,12 @@ public class ProductSearchImpl extends QuerydslRepositorySupport implements Prod
             query.where(booleanBuilder);
         }
         switch (sort) {
-            case "0" :
-                query.orderBy(product.salesVolume.desc());
-                break;
-            case "1" :
-                query.orderBy(product.salesVolume.asc());
-                break;
-            case "2" :
-                query.orderBy(product.price.desc());
-                break;
-            case "3" :
-                query.orderBy(product.price.asc());
-                break;
-            case "4" :
-                query.orderBy(product.regDate.desc());
-                break;
-            case "5" :
-                query.orderBy(product.regDate.asc());
-                break;
-
+            case "0" -> query.orderBy(product.salesVolume.desc());
+            case "1" -> query.orderBy(product.salesVolume.asc());
+            case "2" -> query.orderBy(product.price.desc());
+            case "3" -> query.orderBy(product.price.asc());
+            case "4" -> query.orderBy(product.regDate.desc());
+            case "5" -> query.orderBy(product.regDate.asc());
         }
 //        this.getQuerydsl().applyPagination(pageable, query);
         List<Product> list = query.fetch();

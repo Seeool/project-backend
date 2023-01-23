@@ -29,23 +29,10 @@ public class PageRequestDTO {
         }
         return type.split("");
     }
-    public Pageable getPageable(String sort) {
-        switch (sort) {
-            case "" :
-                return PageRequest.of(this.page - 1, this.size, Sort.by("salesVolume").descending());
-            case "0" :
-                return PageRequest.of(this.page - 1, this.size, Sort.by("salesVolume").descending());
-            case "1" :
-                return PageRequest.of(this.page - 1, this.size, Sort.by("salesVolume").ascending());
-            case "2" :
-                return PageRequest.of(this.page - 1, this.size, Sort.by("price").descending());
-            case "3" :
-                return PageRequest.of(this.page - 1, this.size, Sort.by("price").ascending());
-            case "4" :
-                return PageRequest.of(this.page - 1, this.size, Sort.by("regDate").descending());
-            case "5" :
-                return PageRequest.of(this.page - 1, this.size, Sort.by("regDate").ascending());
-        }
-        return null;
+    public Pageable getPageableDesc(String sort) {
+        return PageRequest.of(this.page - 1, this.size, Sort.by(sort).descending());
+    }
+    public Pageable getPageableAsc(String sort) {
+        return PageRequest.of(this.page - 1, this.size, Sort.by(sort).ascending());
     }
 }
