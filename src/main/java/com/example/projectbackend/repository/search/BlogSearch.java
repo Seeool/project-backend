@@ -7,6 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface BlogSearch {
-    Page<BlogWithReplyCountDTO> searchBlogPaging(String[] types, String category, String keyword, Pageable pageable);
+    Page<BlogWithReplyCountDTO> searchBlogPaging(String category, String keyword, Pageable pageable);
 
 }

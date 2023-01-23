@@ -114,7 +114,6 @@ public class ProductServiceImpl implements ProductService {
         return objectsToDTO2(product, productImages, reviewAvg, reviewCount);
     }
 
-
     @Override
     public List<ProductDTO> getProductsDiscount(PageRequestDTO pageRequestDTO) {
         String category = pageRequestDTO.getCategory();

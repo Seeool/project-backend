@@ -22,7 +22,7 @@ public class BlogSearchImpl extends QuerydslRepositorySupport implements BlogSea
     }
 
     @Override
-    public Page<BlogWithReplyCountDTO> searchBlogPaging(String[] types, String category, String keyword, Pageable pageable) {
+    public Page<BlogWithReplyCountDTO> searchBlogPaging(String category, String keyword, Pageable pageable) {
         QBlog blog = QBlog.blog;
         QReply reply = QReply.reply;
         JPQLQuery<Blog> query = from(blog);
@@ -33,19 +33,11 @@ public class BlogSearchImpl extends QuerydslRepositorySupport implements BlogSea
 
         if(!category.isEmpty()) {
             booleanBuilder.or(blog.category.eq(Integer.parseInt(category)));
-            query.where(booleanBuilder);
         }
 
-        if((types != null && types.length > 0) && keyword != null) {
-            for(String type : types) {
-                switch (type) {
-                    case "t" -> booleanBuilder.or(blog.title.contains(keyword));
-                    case "c" -> booleanBuilder.or(blog.text.contains(keyword));
-                    case "w" -> booleanBuilder.or(blog.member.id.contains(keyword));
-                }
-            }
-            query.where(booleanBuilder);
-        }
+        booleanBuilder.and(blog.title.contains(keyword));
+
+        query.where(booleanBuilder);
 
         this.getQuerydsl().applyPagination(pageable, query);
 

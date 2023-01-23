@@ -88,14 +88,13 @@ public class ProductSearchImpl extends QuerydslRepositorySupport implements Prod
         JPQLQuery<Product> query = from(product);
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
-        if(category.isEmpty()) {
-            booleanBuilder.or(product.name.contains(keyword));
-            query.where(booleanBuilder);
-        }
         if(!category.isEmpty()) {
-            booleanBuilder.or(product.category.eq(Integer.parseInt(category)).and(product.name.contains(keyword)));
-            query.where(booleanBuilder);
+            booleanBuilder.or(product.category.eq(Integer.parseInt(category)));
         }
+
+        booleanBuilder.and(product.name.contains(keyword));
+
+        query.where(booleanBuilder);
 
         this.getQuerydsl().applyPagination(pageable, query);
 

@@ -20,15 +20,9 @@ public class PageRequestDTO {
     private int size = 9;
 
     private String category;
-    private String type;
     private String keyword;
     private String sort;
-    public String[] getTypes() {
-        if(type == null || type.isEmpty()) {
-            return null;
-        }
-        return type.split("");
-    }
+
     public Pageable getPageableDesc(String sort) {
         return PageRequest.of(this.page - 1, this.size, Sort.by(sort).descending());
     }

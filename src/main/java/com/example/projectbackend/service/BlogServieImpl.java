@@ -52,12 +52,11 @@ public class BlogServieImpl implements BlogService {
 
     @Override
     public PageResponseDTO<BlogWithReplyCountDTO> getBlogsPagination(PageRequestDTO pageRequestDTO) {
-        String[] types = pageRequestDTO.getTypes();
         String category = pageRequestDTO.getCategory();
         String keyword = pageRequestDTO.getKeyword();
         Pageable pageable = pageRequestDTO.getPageableDesc("bid");
 
-        Page<BlogWithReplyCountDTO> result = blogRepository.searchBlogPaging(types, category, keyword, pageable);
+        Page<BlogWithReplyCountDTO> result = blogRepository.searchBlogPaging(category, keyword, pageable);
         List<BlogWithReplyCountDTO> dtoList = result.getContent();
         return new PageResponseDTO<>(pageRequestDTO, dtoList, (int) result.getTotalElements());
     }
