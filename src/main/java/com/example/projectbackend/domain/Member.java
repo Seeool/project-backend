@@ -21,7 +21,7 @@ public class Member extends BaseEntity {
     private String pw;
     private String email;
     @Builder.Default
-    @ElementCollection(fetch = FetchType.LAZY)
+    @ElementCollection
     private Set<MemberRole> roleSet = new HashSet<>();
     private boolean fromSocial;
     private String uuid;

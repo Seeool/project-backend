@@ -37,7 +37,7 @@ class ProjectBackendApplicationTests {
                     .pw("1234")
                     .email("test" + i + "@naver.com")
                     .uuid("uuid" + i)
-                    .fileName("file" + i)
+                    .fileName("img/member/member.jpg")
                     .fromSocial(false)
                     .build();
             member.addRole(MemberRole.USER);
@@ -53,7 +53,7 @@ class ProjectBackendApplicationTests {
 
     @Test
     void insertDummyProduct() {
-        IntStream.rangeClosed(1, 200).forEach(i -> {
+        IntStream.rangeClosed(1, 100).forEach(i -> {
 
             int categoryNum = (int) (Math.random() * 11);
             int priceNum = (int) (Math.random() * 10000);
@@ -113,7 +113,7 @@ class ProjectBackendApplicationTests {
 
     @Test
     void insertDummyReviews() {
-        IntStream.rangeClosed(1, 2500).forEach(i -> {
+        IntStream.rangeClosed(1, 1000).forEach(i -> {
             long grade = (long) (Math.random() * 5);
             int pid = (int) (Math.random() * 120) + 1;
             int mno = (int) (Math.random() * 100) + 1;
@@ -155,7 +155,7 @@ class ProjectBackendApplicationTests {
 
     @Test
     void insertDummyReplys() {
-        IntStream.rangeClosed(1, 2500).forEach(i -> {
+        IntStream.rangeClosed(1, 1000).forEach(i -> {
             int bid = (int) (Math.random() * 100) + 1;
             int mno = (int) (Math.random() * 100) + 1;
             Blog blog = Blog.builder()
@@ -236,5 +236,27 @@ class ProjectBackendApplicationTests {
     @Test
     void findBlogCountTest() {
         System.out.println(blogRepository.count());
+    }
+
+
+    @Test
+    @Transactional
+    void findBlogByBid() {
+        List<Object[]> result = blogRepository.findBlogByBid(77L);
+        Object[] rrr = result.get(0);
+        Blog blog = (Blog) rrr[0];
+        Member member = (Member) rrr[1];
+
+        System.out.println(blog);
+        System.out.println(member.getRoleSet());
+        System.out.println(rrr[2]);
+
+
+    }
+
+    @Test
+    void tset() {
+        Optional<Member> result = memberRepository.findTest("test99");
+        System.out.println(result);
     }
 }

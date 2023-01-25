@@ -1,10 +1,8 @@
 package com.example.projectbackend.service;
 
 import com.example.projectbackend.domain.Blog;
-import com.example.projectbackend.dto.BlogDTO;
-import com.example.projectbackend.dto.BlogWithReplyCountDTO;
-import com.example.projectbackend.dto.PageRequestDTO;
-import com.example.projectbackend.dto.PageResponseDTO;
+import com.example.projectbackend.domain.Member;
+import com.example.projectbackend.dto.*;
 import com.example.projectbackend.repository.BlogRepository;
 import com.example.projectbackend.repository.search.BlogSearch;
 import lombok.RequiredArgsConstructor;
@@ -69,6 +67,15 @@ public class BlogServieImpl implements BlogService {
             Long replyCount = (Long) object[1];
             return objectToDTO(blog, replyCount);
         }).toList();
+    }
+
+    @Override
+    public BlogWithMemberAndReplyCountDTO readBlogByBid(Long bid) {
+        List<Object[]> result = blogRepository.findBlogByBid(bid);
+        Blog blog = (Blog) result.get(0)[0];
+        Member member = (Member) result.get(0)[1];
+        Long replyCount = (Long) result.get(0)[2];
+        return objectToDTO2(blog, member, replyCount);
     }
 
 

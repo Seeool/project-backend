@@ -12,8 +12,7 @@ import java.util.Set;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-//@ToString(exclude = {"imageSet", "reviewSet"})
+@ToString(exclude = {"imageSet"})
 public class Product extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

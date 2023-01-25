@@ -38,4 +38,9 @@ public class BlogController {
     ResponseEntity<?> CountCategory(@PathVariable("category") int category) {
         return ResponseEntity.ok(blogService.getCountBlogsByCategory(category));
     }
+
+    @GetMapping("/{bid}")
+    public ResponseEntity<?> read(@PathVariable Long bid) {
+        return ResponseEntity.ok(blogService.readBlogByBid(bid));
+    }
 }

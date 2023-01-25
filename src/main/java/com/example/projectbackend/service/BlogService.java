@@ -2,10 +2,7 @@ package com.example.projectbackend.service;
 
 import com.example.projectbackend.domain.Blog;
 import com.example.projectbackend.domain.Member;
-import com.example.projectbackend.dto.BlogDTO;
-import com.example.projectbackend.dto.BlogWithReplyCountDTO;
-import com.example.projectbackend.dto.PageRequestDTO;
-import com.example.projectbackend.dto.PageResponseDTO;
+import com.example.projectbackend.dto.*;
 
 import java.util.List;
 
@@ -18,6 +15,7 @@ public interface BlogService {
     int getCountBlogsByCategory(int category);
     PageResponseDTO<BlogWithReplyCountDTO> getBlogsPagination(PageRequestDTO pageRequestDTO);
     List<BlogWithReplyCountDTO> get3BlogsOrderByRegDateWithReplyCount();
+    BlogWithMemberAndReplyCountDTO readBlogByBid(Long bid);
 
     default BlogDTO entityToDTO(Blog blog) {
         return BlogDTO.builder()
@@ -45,6 +43,23 @@ public interface BlogService {
                 .replyCount(reviewCount)
                 .build();
     }
+
+    default BlogWithMemberAndReplyCountDTO objectToDTO2(Blog blog, Member member, Long reviewCount) {
+        return BlogWithMemberAndReplyCountDTO.builder()
+                .bid(blog.getBid())
+                .title(blog.getTitle())
+                .text(blog.getText())
+                .category(blog.getCategory())
+                .fileName(blog.getFileName())
+                .mid(member.getId())
+                .memberFileName(member.getFileName())
+                .roleSet(member.getRoleSet())
+                .regDate(blog.getRegDate())
+                .modDate(blog.getModDate())
+                .replyCount(reviewCount)
+                .build();
+    }
+
 
     default Blog dtoToEntity(BlogDTO blogDTO) {
         return Blog.builder()

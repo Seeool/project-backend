@@ -16,11 +16,7 @@ public class ProductController {
     public ResponseEntity<?> read(@PathVariable Long pid) {
         return ResponseEntity.ok(productService.readWithReviewAvg(pid));
     }
-//    @GetMapping("/list")
-//    public ResponseEntity<?> list(PageRequestDTO pageRequestDTO) {
-//        System.out.println(pageRequestDTO);
-//        return ResponseEntity.ok(productService.getProductWithQueryDsl(pageRequestDTO));
-//    }
+
     @GetMapping("/list")
     public ResponseEntity<?> list(PageRequestDTO pageRequestDTO) {
         System.out.println(pageRequestDTO);
