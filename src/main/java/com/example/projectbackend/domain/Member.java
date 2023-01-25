@@ -2,7 +2,6 @@ package com.example.projectbackend.domain;
 
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import lombok.*;
 
@@ -20,6 +19,8 @@ public class Member extends BaseEntity {
     private String id;
     private String pw;
     private String email;
+    private String address;
+    private String phone;
     @Builder.Default
     @ElementCollection
     private Set<MemberRole> roleSet = new HashSet<>();
