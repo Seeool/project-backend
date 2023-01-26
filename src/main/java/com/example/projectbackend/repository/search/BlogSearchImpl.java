@@ -48,7 +48,7 @@ public class BlogSearchImpl extends QuerydslRepositorySupport implements BlogSea
             Blog blog1 = tuple.get(blog);
             Long replyCount = tuple.get(reply.countDistinct());
             BlogWithReplyCountDTO dto = BlogWithReplyCountDTO.builder()
-                    .mid(blog1.getMember().getId())
+                    .mid(blog1.getMember().getMid())
                     .bid(blog1.getBid())
                     .fileName(blog1.getFileName())
                     .title(blog1.getTitle())

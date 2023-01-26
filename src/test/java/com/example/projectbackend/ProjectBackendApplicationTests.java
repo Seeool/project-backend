@@ -1,5 +1,6 @@
 package com.example.projectbackend;
 
+import com.example.projectbackend.config.PasswordEncoderConfig;
 import com.example.projectbackend.domain.*;
 import com.example.projectbackend.dto.ProductDTO;
 import com.example.projectbackend.repository.*;
@@ -27,14 +28,16 @@ class ProjectBackendApplicationTests {
     private ReviewRepository reviewRepository;
     @Autowired
     private ReplyRepository replyRepository;
+    @Autowired
+    private PasswordEncoderConfig passwordEncoderConfig;
 
 
     @Test
     void insertDummyMember() {
         IntStream.rangeClosed(1, 100).forEach(i -> {
             Member member = Member.builder()
-                    .id("test" + i)
-                    .pw("1234")
+                    .mid("test" + i)
+                    .pw(passwordEncoderConfig.passwordEncoder().encode("1234"))
                     .email("test" + i + "@naver.com")
                     .uuid("uuid" + i)
                     .fileName("img/member/member.jpg")
@@ -121,7 +124,7 @@ class ProjectBackendApplicationTests {
                     .pid((long) pid)
                     .build();
             Member member = Member.builder()
-                    .id("test"+mno)
+                    .mid("test"+mno)
                     .build();
             Review review = Review.builder()
                     .grade(grade)
@@ -140,7 +143,7 @@ class ProjectBackendApplicationTests {
             int mno = (int) (Math.random() * 100) + 1;
             int imgNum = (int) (Math.random() * 6) + 1;
             Member member = Member.builder()
-                    .id("test"+mno)
+                    .mid("test"+mno)
                     .build();
             Blog blog = Blog.builder()
                     .title("더미 블로그 제목.."+i)
@@ -162,7 +165,7 @@ class ProjectBackendApplicationTests {
                     .bid((long) bid)
                     .build();
             Member member = Member.builder()
-                    .id("test"+mno)
+                    .mid("test"+mno)
                     .build();
             Reply reply = Reply.builder()
                     .text("이 상품 평가는..." + i)
@@ -254,9 +257,4 @@ class ProjectBackendApplicationTests {
 
     }
 
-    @Test
-    void tset() {
-        Optional<Member> result = memberRepository.findTest("test99");
-        System.out.println(result);
-    }
 }

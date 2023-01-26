@@ -24,7 +24,7 @@ public interface BlogService {
                 .text(blog.getText())
                 .category(blog.getCategory())
                 .fileName(blog.getFileName())
-                .mid(blog.getMember().getId())
+                .mid(blog.getMember().getMid())
                 .regDate(blog.getRegDate())
                 .modDate(blog.getModDate())
                 .build();
@@ -37,7 +37,7 @@ public interface BlogService {
                 .text(blog.getText())
                 .category(blog.getCategory())
                 .fileName(blog.getFileName())
-                .mid(blog.getMember().getId())
+                .mid(blog.getMember().getMid())
                 .regDate(blog.getRegDate())
                 .modDate(blog.getModDate())
                 .replyCount(reviewCount)
@@ -51,7 +51,7 @@ public interface BlogService {
                 .text(blog.getText())
                 .category(blog.getCategory())
                 .fileName(blog.getFileName())
-                .mid(member.getId())
+                .mid(member.getMid())
                 .memberFileName(member.getFileName())
                 .roleSet(member.getRoleSet())
                 .regDate(blog.getRegDate())
@@ -68,7 +68,7 @@ public interface BlogService {
                 .text(blogDTO.getText())
                 .category(blogDTO.getCategory())
                 .fileName(blogDTO.getFileName())
-                .member(Member.builder().id(blogDTO.getMid()).build())
+                .member(Member.builder().mid(blogDTO.getMid()).build())
                 .build();
     }
 

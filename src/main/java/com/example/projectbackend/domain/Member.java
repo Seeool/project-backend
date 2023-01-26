@@ -16,8 +16,9 @@ import java.util.Set;
 @ToString(exclude = "roleSet")
 public class Member extends BaseEntity {
     @Id
-    private String id;
+    private String mid;
     private String pw;
+    private String name;
     private String email;
     private String address;
     private String phone;

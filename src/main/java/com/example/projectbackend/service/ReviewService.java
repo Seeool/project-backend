@@ -15,7 +15,7 @@ public interface ReviewService {
     default ReviewDTO entityToDTO(Review review) {
         ReviewDTO reviewDTO = ReviewDTO.builder()
                 .reviewNo(review.getReviewNo())
-                .mid(review.getMember().getId())
+                .mid(review.getMember().getMid())
                 .pid(review.getProduct().getPid())
                 .grade(review.getGrade())
                 .text(review.getText())
@@ -27,7 +27,7 @@ public interface ReviewService {
 
     default Review dtoToEntity(ReviewDTO reviewDTO) {
         Member member = Member.builder()
-                .id(reviewDTO.getMid())
+                .mid(reviewDTO.getMid())
                 .build();
         Product product = Product.builder()
                 .pid(reviewDTO.getPid())

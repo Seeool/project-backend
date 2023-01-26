@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class ReplyDTO {
     private Long replyNO;
     private Long bid;
-    private Long mid;
+    private String mid;
     private String text;
     private LocalDateTime regDate, modDate;
 }
