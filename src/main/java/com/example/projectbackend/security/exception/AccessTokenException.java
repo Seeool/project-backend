@@ -45,6 +45,7 @@ public class AccessTokenException extends RuntimeException { //RuntimeException 
         Gson gson = new Gson();
 
         String responseStr = gson.toJson(Map.of("msg",token_error.getMsg(),"time",new Date()));
+        System.out.println(responseStr);
 
         //메소드에 throw Exception을 적는거랑 이거랑 무슨 차이???
         try {

@@ -7,12 +7,10 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseCookie;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -23,29 +21,30 @@ import java.util.Date;
 import java.util.Map;
 
 @RequiredArgsConstructor
-public class RefreshTokenFilter extends OncePerRequestFilter {
+public class RefreshTokenFilter2 extends OncePerRequestFilter {
+    private final String refreshPath;
     private final JWTUtil jwtUtil;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getRequestURI();
-        if(!path.equals("/api/token/getAccessToken")) { //TokenCheckFilter와 다른 점은 이건 특정 링크경로에만 동작
+        if(!path.equals(refreshPath)) { //TokenCheckFilter와 다른 점은 이건 특정 링크경로에만 동작
             System.out.println("RefreshTokenFilter 건너 뜀");
             filterChain.doFilter(request, response);
             return; //메소드를 더 이상 실행시키지 않는다.
         }
         System.out.println("RefreshTokenFilter 동작");
+        Map<String, String> tokens = parseRequsetJSON(request);
 
-        String refreshToken = "";
+        String accessToken = tokens.get("accessToken");
+        String refreshToken = tokens.get("refreshToken");
 
-        Cookie[] cookies = request.getCookies();
-        for (Cookie cookie : cookies) {
-            String name = cookie.getName();
-            String value = cookie.getValue();
-            if(name.equals("refreshToken")) {
-                refreshToken = value;
-            }
+        //AccessToken Validation
+        try {
+            checkAccessToken(accessToken);
+        }catch (RefreshTokenException refreshTokenException) {
+            refreshTokenException.sendResponseError(response);
+            return; //메소드를 더 이상 실행시키지 않는다.
         }
-
         //RefreshToken Validation
         try {
             checkRefreshToken(refreshToken);
@@ -71,7 +70,7 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
         String accessTokenValue = jwtUtil.generateToken(Map.of("mid",mid),1);
         System.out.println("새로운 AccessToken 생성완료");
         
-        String refreshTokenValue = refreshToken;
+        String refreshTokenValue = tokens.get("refreshToken");
         //RefreshToken 만료시간까지의 기한 조건
         if(gapTime < 1000*60*5) {
             System.out.println("새로운 RefreshToken 필요함");
@@ -83,6 +82,26 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
 
         sendTokens(accessTokenValue, refreshTokenValue, response);
 //        filterChain.doFilter(request, response); // 다음 필터 호출이 필요 없는 이유??
+    }
+    private Map<String, String> parseRequsetJSON(HttpServletRequest request) {
+        try {
+            Reader reader = new InputStreamReader(request.getInputStream());
+            Gson gson = new Gson();
+            return gson.fromJson(reader, Map.class);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    private void checkAccessToken(String accessToken) throws RefreshTokenException {
+        try {
+            jwtUtil.validateToken(accessToken);
+        }catch (ExpiredJwtException expiredJwtException) {
+            System.out.println("AccessToken 기간 만료"); //Exception을 throw하지 않는다. 여기는 RefreshTokenFilter이고 정확한 AccessToken 검증 예외처리는 TokenCheckFilter에서 끝난다.
+        }catch (Exception exception) {
+            throw new RefreshTokenException(RefreshTokenException.ErrorCase.NO_ACCESS);
+        }
     }
 
     private Map<String, Object> checkRefreshToken(String refreshToken) throws RefreshTokenException {
@@ -102,18 +121,10 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
     }
 
     private void sendTokens(String accessTokenValue, String refreshTokenValue, HttpServletResponse response) {
-        ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshTokenValue)
-                .domain("localhost")
-                .sameSite("lax")
-                .httpOnly(true)
-                .secure(true)
-                .path("/")
-                .build();
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         Gson gson = new Gson();
         String jsonStr = gson.toJson(Map.of("accessToken",accessTokenValue,"refreshToken",refreshTokenValue));
         try {
-            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-            response.addHeader("Set-Cookie", cookie.toString());
             response.getWriter().println(jsonStr);
         }catch (IOException e) {
             throw new RuntimeException(e);

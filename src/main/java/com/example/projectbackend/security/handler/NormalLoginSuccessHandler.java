@@ -22,10 +22,10 @@ public class NormalLoginSuccessHandler implements AuthenticationSuccessHandler {
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         System.out.println("로그인 성공 핸들러 동작");
-        Map<String, Object> payload = Map.of("username", authentication.getName());
+        Map<String, Object> payload = Map.of("mid", authentication.getName());
 
-        String accessToken = jwtUtil.generateToken(payload, 5);
-        String refreshToken = jwtUtil.generateToken(payload, 30);
+        String accessToken = jwtUtil.generateToken(payload, 1);
+        String refreshToken = jwtUtil.generateToken(payload, 60 * 24 * 7);
 
         Map<String, Object> tokenSet = Map.of("accessToken", accessToken, "refreshToken", refreshToken);
 

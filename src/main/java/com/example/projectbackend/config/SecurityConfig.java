@@ -1,7 +1,9 @@
 package com.example.projectbackend.config;
 
 import com.example.projectbackend.security.MemberDetailsService;
+import com.example.projectbackend.security.filter.AccessTokenFilter;
 import com.example.projectbackend.security.filter.NormalLoginFilter;
+import com.example.projectbackend.security.filter.RefreshTokenFilter;
 import com.example.projectbackend.security.handler.NormalLoginFailureHandler;
 import com.example.projectbackend.security.handler.NormalLoginSuccessHandler;
 import com.example.projectbackend.util.JWTUtil;
@@ -52,6 +54,14 @@ public class SecurityConfig {
         normalLoginFilter.setAuthenticationFailureHandler(normalLoginFailureHandler);
         normalLoginFilter.setSecurityContextRepository(securityContextRepository);
         http.addFilterBefore(normalLoginFilter, UsernamePasswordAuthenticationFilter.class);
+
+        //AccessTokenFilter
+        AccessTokenFilter accessTokenFilter = new AccessTokenFilter(jwtUtil, memberDetailsService);
+        http.addFilterBefore(accessTokenFilter, UsernamePasswordAuthenticationFilter.class);
+
+        //RefreshTokenFilter
+        RefreshTokenFilter refreshTokenFilter = new RefreshTokenFilter(jwtUtil);
+        http.addFilterBefore(refreshTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

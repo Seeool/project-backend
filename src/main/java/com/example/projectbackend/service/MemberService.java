@@ -2,9 +2,12 @@ package com.example.projectbackend.service;
 
 import com.example.projectbackend.domain.Member;
 import com.example.projectbackend.dto.MemberDTO;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.security.core.Authentication;
 
 public interface MemberService {
     MemberDTO getMemberByMid(String mid);
+    MemberDTO getMemberByAccessToken(Authentication authentication);
 
     default MemberDTO entityToDTO(Member member) {
         return MemberDTO.builder()
