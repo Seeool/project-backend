@@ -27,7 +27,7 @@ public class NormalLoginFilter extends AbstractAuthenticationProcessingFilter {
         Map<String, Object> loginInfo = getLoginInfo(request);
         System.out.println("로그인 정보 : "+loginInfo);
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                UsernamePasswordAuthenticationToken.unauthenticated(loginInfo.get("id"), loginInfo.get("pw"));
+                UsernamePasswordAuthenticationToken.unauthenticated(loginInfo.get("mid"), loginInfo.get("pw"));
         return getAuthenticationManager().authenticate(usernamePasswordAuthenticationToken);
     }
 

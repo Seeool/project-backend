@@ -68,14 +68,14 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
         
         //새로운 accessToken 생성
         String mid = (String) refreshClaims.get("mid");
-        String accessTokenValue = jwtUtil.generateToken(Map.of("mid",mid),1);
+        String accessTokenValue = jwtUtil.generateToken(Map.of("mid",mid),10);
         System.out.println("새로운 AccessToken 생성완료");
         
         String refreshTokenValue = refreshToken;
         //RefreshToken 만료시간까지의 기한 조건
         if(gapTime < 1000*60*5) {
             System.out.println("새로운 RefreshToken 필요함");
-            refreshTokenValue = jwtUtil.generateToken(Map.of("mid",mid), 30);
+            refreshTokenValue = jwtUtil.generateToken(Map.of("mid",mid), 60 * 24 * 7);
             System.out.println("새로운 RefreshToken 생성 완료");
         }
         System.out.println("accessToken : "+accessTokenValue);

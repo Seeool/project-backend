@@ -13,4 +13,5 @@ public interface MemberRepository extends JpaRepository<Member, String> {
     @Query("select m from Member m where m.mid = :mid")
     Optional<Member> findByMid(String mid);
 
+    Optional<Member> findByEmail(String email);
 }

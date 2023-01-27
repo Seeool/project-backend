@@ -62,6 +62,7 @@ public class AccessTokenFilter extends OncePerRequestFilter {
 
         String tokenType = headerStr.substring(0,6);
         String tokenStr = headerStr.substring(7);
+        System.out.println("얻은 액세스 토큰 : "+tokenStr);
 
         if(tokenType.equalsIgnoreCase("bearer") == false) {
             System.out.println("Bearer 타입이 아님");
