@@ -8,8 +8,11 @@ import com.google.gson.Gson;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -33,7 +36,11 @@ public class MemberController {
     }
 
     @PostMapping("/memberJoin")
-    public ResponseEntity<?> joinMember(@RequestBody MemberJoinDTO memberJoinDTO)  {
+    public ResponseEntity<?> joinMember(@RequestBody MemberJoinDTO memberJoinDTO, BindingResult bindingResult)  {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.badRequest().body("notvalid");
+        }
+
         try {
             memberService.create(memberJoinDTO);
         } catch (MemberService.MidExistException e) {
@@ -42,6 +49,20 @@ public class MemberController {
         }
 
         return ResponseEntity.ok("");
+    }
+
+    @PostMapping("/logoutProc")
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+        System.out.println("로그아웃");
+        ResponseCookie cookie = ResponseCookie.from("refreshToken", null)
+                .domain("localhost")
+                .sameSite("lax")
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(0)
+                .build();
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body("");
     }
 
 

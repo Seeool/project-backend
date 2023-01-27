@@ -1,21 +1,30 @@
 package com.example.projectbackend.security;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import com.example.projectbackend.config.PasswordEncoderConfig;
+import com.example.projectbackend.domain.Member;
+import com.example.projectbackend.domain.MemberRole;
+import com.example.projectbackend.repository.MemberRepository;
+import com.example.projectbackend.util.JWTUtil;
+import com.google.gson.Gson;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class GoogleAuthService {
-    String ClientId = "369742162754-335fdde6jif0kib2jt4kn8sjbm9r9uh9.apps.googleusercontent.com";
-    String ClientSecret = "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";
-    String RedirectUri = "http://localhost:9000/login/oauth2/code/google";
+    private final MemberRepository memberRepository;
+    private final PasswordEncoderConfig passwordEncoderConfig;
+    private final JWTUtil jwtUtil;
+    String ClientId = "869246748275-r4btnesji7e35cl7a8d1e0094c5so2ag.apps.googleusercontent.com";
+    String ClientSecret = "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";
+    String RedirectUri = "http://localhost:3000/oauthGoogle";
 
     public String getGoogleAccessToken(String code) {
         RestTemplate rt = new RestTemplate();
@@ -39,13 +48,13 @@ public class GoogleAuthService {
         System.out.println("Body 생성완료");
 
         //Http 객체 생성
-        HttpEntity<?> naverTokenRequest = new HttpEntity<>(body, headers);
+        HttpEntity<?> googleTokenRequest = new HttpEntity<>(body, headers);
         System.out.println("Http 객체 생성완료");
         System.out.println("토큰 요청");
         ResponseEntity<Map> accessTokenResponse = rt.exchange(
                 "https://oauth2.googleapis.com/token",
                 HttpMethod.POST,
-                naverTokenRequest,
+                googleTokenRequest,
                 Map.class
         );
         System.out.println("토큰 받아옴");
@@ -55,7 +64,7 @@ public class GoogleAuthService {
         return naverAccessToken;
     }
     public Map<String, Object> getGoogleInfo(String googleAccessToken) {
-        System.out.println("네이버 계정정보 요청 시작");
+        System.out.println("구글 계정정보 요청 시작");
         RestTemplate rt = new RestTemplate();
         System.out.println("액세스토큰 : "+googleAccessToken);
 
@@ -75,6 +84,50 @@ public class GoogleAuthService {
         Map<String, Object> googleAccount = (Map<String, Object>) accountInfoResponse.getBody();
         System.out.println(googleAccount);
         return googleAccount;
+    }
+
+    public ResponseEntity<?> publishJwtTokens(Map<String, Object> googleAccount) {
+        String id = "Google_" + googleAccount.get("id");
+        String email = (String) googleAccount.get("email");
+        System.out.println(id);
+        System.out.println(email);
+        Optional<Member> result = memberRepository.findByEmail(email);
+        Member member = null;
+        if (result.isEmpty()) {
+            System.out.println("첫 소셜로그인, 자동회원가입 시작");
+            member = Member.builder()
+                    .mid(id)
+                    .pw(passwordEncoderConfig.passwordEncoder().encode("1234"))
+                    .name(email)
+                    .email(email)
+                    .phone("")
+                    .address("")
+                    .fromSocial(true)
+                    .build();
+            member.addRole(MemberRole.USER);
+            memberRepository.save(member);
+        } else {
+            System.out.println("첫 소셜로그인 아님");
+            member = result.get();
+        }
+
+        Map<String, Object> payload = Map.of("mid", member.getMid());
+        String accessToken = jwtUtil.generateToken(payload, 10);
+        String refreshToken = jwtUtil.generateToken(payload, 60 * 24 * 7);
+
+        Gson gson = new Gson();
+        Map<String, String> keyMap = Map.of("accessToken", accessToken, "refreshToken", refreshToken);
+        String jsonStr = gson.toJson(keyMap);
+
+        ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
+                .domain("localhost")
+                .sameSite("lax")
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .build();
+
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body(jsonStr);
     }
 
 

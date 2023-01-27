@@ -1,20 +1,30 @@
 package com.example.projectbackend.security;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import com.example.projectbackend.config.PasswordEncoderConfig;
+import com.example.projectbackend.domain.Member;
+import com.example.projectbackend.domain.MemberRole;
+import com.example.projectbackend.repository.MemberRepository;
+import com.example.projectbackend.util.JWTUtil;
+import com.google.gson.Gson;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class KakaoAuthService {
-    String ClientId = "330d5a6ed6f604b5f4a772276ebd172c";
-    String RedirectUri = "http://localhost:9000/login/oauth2/code/kakao";
+    private final MemberRepository memberRepository;
+    private final PasswordEncoderConfig passwordEncoderConfig;
+    private final JWTUtil jwtUtil;
+
+    String ClientId = "2bd4815fa725762dad388c9d643e396f";
+    String RedirectUri = "http://localhost:3000/oauthKakao";
 
     public String getKakaoAccessToken(String code) {
         RestTemplate rt = new RestTemplate();
@@ -76,8 +86,51 @@ public class KakaoAuthService {
         System.out.println(kakaoAccount);
         return kakaoAccount;
 
-
     }
 
+    public ResponseEntity<?> publishJwtTokens(Map<String, Object> kakaoAccount) {
+        Map<String, String> userInfo = (Map<String, String>) kakaoAccount.get("kakao_account");
+        String id = "Kakao_" + kakaoAccount.get("id");
+        String email = userInfo.get("email");
+        System.out.println(id);
+        System.out.println(email);
+        Optional<Member> result = memberRepository.findByEmail(email);
+        Member member = null;
+        if (result.isEmpty()) {
+            System.out.println("첫 소셜로그인, 자동회원가입 시작");
+            member = Member.builder()
+                    .mid(id)
+                    .pw(passwordEncoderConfig.passwordEncoder().encode("1234"))
+                    .name(email)
+                    .email(email)
+                    .phone("")
+                    .address("")
+                    .fromSocial(true)
+                    .build();
+            member.addRole(MemberRole.USER);
+            memberRepository.save(member);
+        } else {
+            System.out.println("첫 소셜로그인 아님");
+            member = result.get();
+        }
+
+        Map<String, Object> payload = Map.of("mid", member.getMid());
+        String accessToken = jwtUtil.generateToken(payload, 10);
+        String refreshToken = jwtUtil.generateToken(payload, 60 * 24 * 7);
+
+        Gson gson = new Gson();
+        Map<String, String> keyMap = Map.of("accessToken", accessToken, "refreshToken", refreshToken);
+        String jsonStr = gson.toJson(keyMap);
+
+        ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
+                .domain("localhost")
+                .sameSite("lax")
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .build();
+
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body(jsonStr);
+    }
 
 }
