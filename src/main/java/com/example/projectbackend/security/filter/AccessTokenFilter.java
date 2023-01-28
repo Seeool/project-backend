@@ -27,7 +27,7 @@ public class AccessTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String path = request.getRequestURI(); //경로를 주입받는 필터가 아니라서 만들어야함
         System.out.println(path);
-        if(!path.startsWith("/api/member")) { //RefreshTokenFilter와 다른 점은 이건 startsWith인것
+        if(!path.startsWith("/api/member") && !path.contains("authentication")) {
             System.out.println("AccessTokenFilter 건너 뜀");
             filterChain.doFilter(request, response); // 다음 필터로 진행하라는 뜻
             return;
@@ -45,6 +45,7 @@ public class AccessTokenFilter extends OncePerRequestFilter {
             UserDetails userDetails = memberDetailsService.loadUserByUsername(mid);
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            System.out.println(userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             System.out.println("authentication 셋 완료");
             filterChain.doFilter(request, response); // 다음 필터 호출이 필요한 이유?????

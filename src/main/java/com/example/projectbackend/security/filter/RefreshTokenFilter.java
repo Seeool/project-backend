@@ -95,9 +95,9 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
             throw new RefreshTokenException(RefreshTokenException.ErrorCase.OLD_REFRESH);
         }catch (MalformedJwtException malformedJwtException) {
             System.out.println("RefreshToken Malformedexception");
-            throw new RefreshTokenException(RefreshTokenException.ErrorCase.NO_REFRSHE);
+            throw new RefreshTokenException(RefreshTokenException.ErrorCase.NO_REFRESH);
         }catch (Exception exception) {
-            throw new RefreshTokenException(RefreshTokenException.ErrorCase.NO_REFRSHE);
+            throw new RefreshTokenException(RefreshTokenException.ErrorCase.NO_REFRESH);
         }
     }
 

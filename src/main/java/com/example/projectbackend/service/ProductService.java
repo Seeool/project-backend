@@ -11,16 +11,29 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public interface ProductService {
-    Long create(ProductDTO productDTO);
+    Long create(ProductDTO productDTO) throws PidExistException;
+
     ProductDTO read(Long pid);
+
     void update(ProductDTO productDTO);
+
     void delete(Long pid);
+
     List<ProductDTO> getFeaturedList();
+
     List<ProductDTO> getOrderByRegDateDescList();
+
     List<ProductWithReviewAvgDTO> getOrderByReviewAvgDescList();
+
     ProductWithReviewAvgDTO readWithReviewAvg(Long pid);
+
     PageResponseDTO<ProductDTO> getProductsPagination(PageRequestDTO pageRequestDTO);
+
     List<ProductDTO> getProductsDiscount(PageRequestDTO pageRequestDTO);
+
+    static class PidExistException extends Exception {
+    }
+
     default Product dtoToEntity(ProductDTO productDTO) {
         Product product = Product.builder()
                 .pid(productDTO.getPid())
@@ -35,10 +48,13 @@ public interface ProductService {
                 .stock(productDTO.getStock())
                 .salesVolume(productDTO.getSalesVolume())
                 .build();
-        if(productDTO.getFileNames() != null) {
+        if (productDTO.getFileNames().size() > 0) {
             productDTO.getFileNames().forEach(fileName -> {
                 product.addImage(fileName);
             });
+        }
+        if (productDTO.getFileNames().size() == 0) {
+            product.addImage("/img/noImage.jpg");
         }
         return product;
     }
@@ -59,9 +75,11 @@ public interface ProductService {
                 .regDate(product.getRegDate())
                 .modDate(product.getModDate())
                 .build();
+
         List<String> fileNames = product.getImageSet().stream().sorted().map(productImage ->
                 productImage.getFileName()).collect(Collectors.toList());
         productDTO.setFileNames(fileNames);
+
         return productDTO;
     }
 
@@ -82,6 +100,7 @@ public interface ProductService {
                 .modDate(product.getModDate())
                 .reviewAvg(reviewAvg)
                 .build();
+
         List<String> fileNames = product.getImageSet().stream().sorted().map(productImage ->
                 productImage.getFileName()).collect(Collectors.toList());
         productWithReviewAvgDTO.setFileNames(fileNames);
@@ -107,6 +126,7 @@ public interface ProductService {
                 .reviewAvg(reviewAvg)
                 .reviewCount(reviewCount)
                 .build();
+
         List<String> fileNames = productImageList.stream().sorted().map(productImage ->
                 productImage.getFileName()).collect(Collectors.toList());
         productWithReviewAvgDTO.setFileNames(fileNames);

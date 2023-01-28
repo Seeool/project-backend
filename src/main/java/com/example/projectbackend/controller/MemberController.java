@@ -40,15 +40,13 @@ public class MemberController {
         if (bindingResult.hasErrors()) {
             return ResponseEntity.badRequest().body("notvalid");
         }
-
         try {
             memberService.create(memberJoinDTO);
+            return ResponseEntity.ok("");
         } catch (MemberService.MidExistException e) {
             System.out.println("exist 에러");
             return ResponseEntity.badRequest().body("exist");
         }
-
-        return ResponseEntity.ok("");
     }
 
     @PostMapping("/logoutProc")

@@ -31,7 +31,14 @@ public class ProductServiceImpl implements ProductService {
     private final ModelMapper modelMapper;
 
     @Override
-    public Long create(ProductDTO productDTO) {
+    public Long create(ProductDTO productDTO) throws PidExistException {
+        Long pid = productDTO.getPid();
+        if(pid != null) {
+            boolean exist = productRepository.existsById(pid);
+            if (exist) {
+                throw new PidExistException();
+            }
+        }
         Product product = dtoToEntity(productDTO);
         return productRepository.save(product).getPid();
     }
@@ -46,17 +53,18 @@ public class ProductServiceImpl implements ProductService {
     public void update(ProductDTO productDTO) {
         Optional<Product> result = productRepository.findById(productDTO.getPid());
         Product product = result.orElseThrow();
+        System.out.println("수정할 상품 엔티티 찾음");
 
-        product.changeCategory(product.getCategory());
-        product.changeName(product.getName());
-        product.changePrice(product.getPrice());
-        product.changeDiscount(product.isDiscount());
-        product.changeOrigin(product.getOrigin());
-        product.changeDcRatio(product.getDcRatio());
-        product.changeText(product.getText());
-        product.changeStock(product.getStock());
-        product.changeSalesVolume(product.getSalesVolume());
-        product.changeOriginPrice(product.getOriginPrice());
+        product.changeCategory(productDTO.getCategory());
+        product.changeName(productDTO.getName());
+        product.changePrice(productDTO.getPrice());
+        product.changeDiscount(productDTO.isDiscount());
+        product.changeOrigin(productDTO.getOrigin());
+        product.changeDcRatio(productDTO.getDcRatio());
+        product.changeText(productDTO.getText());
+        product.changeStock(productDTO.getStock());
+        product.changeSalesVolume(productDTO.getSalesVolume());
+        product.changeOriginPrice(productDTO.getOriginPrice());
 
         product.clearImages();
 
@@ -66,6 +74,7 @@ public class ProductServiceImpl implements ProductService {
                 product.addImage(arr[0]);
             }
         }
+        System.out.println("수정 완료");
         productRepository.save(product);
     }
 
