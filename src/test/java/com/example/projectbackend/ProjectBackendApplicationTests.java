@@ -54,6 +54,46 @@ class ProjectBackendApplicationTests {
     }
 
     @Test
+    void insertAdminManagerUser() {
+
+        Member admin = Member.builder()
+                .mid("admin")
+                .pw(passwordEncoderConfig.passwordEncoder().encode("1234"))
+                .email("admin@naver.com")
+                .fileName("img/member/base.png")
+                .name("김아무개")
+                .fromSocial(false)
+                .build();
+        admin.addRole(MemberRole.ADMIN);
+
+        Member manager = Member.builder()
+                .mid("manager")
+                .pw(passwordEncoderConfig.passwordEncoder().encode("1234"))
+                .email("manager@naver.com")
+                .fileName("img/member/base.png")
+                .name("이아무개")
+                .fromSocial(false)
+                .build();
+        manager.addRole(MemberRole.MANAGER);
+
+        Member user = Member.builder()
+                .mid("user")
+                .pw(passwordEncoderConfig.passwordEncoder().encode("1234"))
+                .email("user@naver.com")
+                .fileName("img/member/base.png")
+                .fromSocial(false)
+                .name("박아무개")
+                .build();
+        user.addRole(MemberRole.USER);
+
+
+        memberRepository.save(admin);
+        memberRepository.save(manager);
+        memberRepository.save(user);
+    }
+
+
+    @Test
     void insertDummyProduct() {
         IntStream.rangeClosed(1, 100).forEach(i -> {
 
@@ -123,7 +163,7 @@ class ProjectBackendApplicationTests {
                     .pid((long) pid)
                     .build();
             Member member = Member.builder()
-                    .mid("test"+mno)
+                    .mid("test" + mno)
                     .build();
             Review review = Review.builder()
                     .grade(grade)
@@ -137,16 +177,16 @@ class ProjectBackendApplicationTests {
 
     @Test
     void insertDummyBlogs() {
-        IntStream.rangeClosed(1,100).forEach(i -> {
+        IntStream.rangeClosed(1, 100).forEach(i -> {
             int categoryNum = (int) (Math.random() * 4);
             int mno = (int) (Math.random() * 100) + 1;
             int imgNum = (int) (Math.random() * 6) + 1;
             Member member = Member.builder()
-                    .mid("test"+mno)
+                    .mid("test" + mno)
                     .build();
             Blog blog = Blog.builder()
-                    .title("더미 블로그 제목.."+i)
-                    .text("테스트용 내용"+i)
+                    .title("더미 블로그 제목.." + i)
+                    .text("테스트용 내용" + i)
                     .category(categoryNum)
                     .member(member)
                     .fileName("/img/blog/blog-" + imgNum + ".jpg")
@@ -164,7 +204,7 @@ class ProjectBackendApplicationTests {
                     .bid((long) bid)
                     .build();
             Member member = Member.builder()
-                    .mid("test"+mno)
+                    .mid("test" + mno)
                     .build();
             Reply reply = Reply.builder()
                     .text("이 상품 평가는..." + i)

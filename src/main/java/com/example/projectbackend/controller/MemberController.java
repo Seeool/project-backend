@@ -53,10 +53,10 @@ public class MemberController {
     public ResponseEntity<?> logout(HttpServletRequest request) {
         System.out.println("로그아웃");
         ResponseCookie cookie = ResponseCookie.from("refreshToken", null)
-                .domain("localhost")
+                .domain("seol.site")
                 .sameSite("lax")
-                .httpOnly(true)
-                .secure(true)
+                .httpOnly(false)
+                .secure(false)
                 .path("/")
                 .maxAge(0)
                 .build();

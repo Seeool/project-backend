@@ -125,10 +125,10 @@ public class KakaoAuthService {
         String jsonStr = gson.toJson(keyMap);
 
         ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
-                .domain("localhost")
+                .domain("seol.site")
                 .sameSite("lax")
-                .httpOnly(true)
-                .secure(true)
+                .httpOnly(false)
+                .secure(false)
                 .path("/")
                 .build();
 

@@ -17,6 +17,7 @@ public class Blog extends BaseEntity {
     private long bid;
     private int category;
     private String title;
+    @Column(length = 1000)
     private String text;
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;

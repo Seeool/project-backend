@@ -30,10 +30,10 @@ public class NormalLoginSuccessHandler implements AuthenticationSuccessHandler {
         Map<String, Object> tokenSet = Map.of("accessToken", accessToken, "refreshToken", refreshToken);
 
         ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
-                .domain("localhost")
+                .domain("seol.site")
                 .sameSite("lax")
-                .httpOnly(true)
-                .secure(true)
+                .httpOnly(false)
+                .secure(false)
                 .path("/")
                 .build();
         Gson gson = new Gson();

@@ -103,10 +103,10 @@ public class RefreshTokenFilter extends OncePerRequestFilter {
 
     private void sendTokens(String accessTokenValue, String refreshTokenValue, HttpServletResponse response) {
         ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshTokenValue)
-                .domain("localhost")
+                .domain("seol.site")
                 .sameSite("lax")
-                .httpOnly(true)
-                .secure(true)
+                .httpOnly(false)
+                .secure(false)
                 .path("/")
                 .build();
         Gson gson = new Gson();
