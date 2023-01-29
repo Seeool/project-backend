@@ -32,6 +32,7 @@ public class Product extends BaseEntity {
     private boolean discount;
     private int dcRatio;
     private int originPrice;
+    @Column(length = 5000)
     private String text;
 
 
