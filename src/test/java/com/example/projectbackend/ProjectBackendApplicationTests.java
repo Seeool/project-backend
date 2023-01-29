@@ -39,8 +39,7 @@ class ProjectBackendApplicationTests {
                     .mid("test" + i)
                     .pw(passwordEncoderConfig.passwordEncoder().encode("1234"))
                     .email("test" + i + "@naver.com")
-                    .uuid("uuid" + i)
-                    .fileName("img/member/member.jpg")
+                    .fileName("img/member/base.png")
                     .fromSocial(false)
                     .build();
             member.addRole(MemberRole.USER);

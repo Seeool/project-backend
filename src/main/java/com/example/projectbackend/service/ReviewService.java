@@ -10,6 +10,8 @@ import com.example.projectbackend.dto.ReviewDTO;
 import java.util.List;
 
 public interface ReviewService {
+    Long create(ReviewDTO reviewDTO);
+    void delete(Long reviewNo);
     PageResponseDTO<ReviewDTO> getReviewsByPid(Long pid, PageRequestDTO pageRequestDTO);
 
     default ReviewDTO entityToDTO(Review review) {

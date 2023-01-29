@@ -10,6 +10,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Set;
 
@@ -26,8 +27,8 @@ public class MemberDTO implements UserDetails {
     private String phone;
     private Set<MemberRole> roleSet;
     private boolean fromSocial;
-    private String uuid;
     private String fileName;
+    private LocalDateTime regDate, modDate;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roleSet.stream().map(role -> new SimpleGrantedAuthority(role.getRoleName())).toList();

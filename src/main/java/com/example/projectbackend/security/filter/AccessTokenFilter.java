@@ -38,8 +38,7 @@ public class AccessTokenFilter extends OncePerRequestFilter {
             System.out.println("토큰 검증 시작");
             Map<String, Object> payload = validateAccessToken(request);
             System.out.println("토큰 검증 성공");
-            
-            //UserDetails를 이용한 JWT토큰을 스프링 시큐리티에 이용하기 위한 절차
+
             String mid = (String) payload.get("mid");
             System.out.println("mid : "+mid);
             UserDetails userDetails = memberDetailsService.loadUserByUsername(mid);
@@ -48,14 +47,14 @@ public class AccessTokenFilter extends OncePerRequestFilter {
             System.out.println(userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             System.out.println("authentication 셋 완료");
-            filterChain.doFilter(request, response); // 다음 필터 호출이 필요한 이유?????
+            filterChain.doFilter(request, response);
         }catch (AccessTokenException accessTokenException) {
             System.out.println("토큰 검증 실패");
             accessTokenException.sendResponseError(response);
         }
     }
     private Map<String, Object> validateAccessToken(HttpServletRequest request) throws AccessTokenException{ //throws를 안붙여도 되지않나??
-        // throws는 이 validateAccessToken메서드를 호출한곳에서 해당 exception을 처리하라고 넘겨주는것
+
         String headerStr = request.getHeader("Authorization");
         if(headerStr == null || headerStr.length() < 8) {
             throw new AccessTokenException(AccessTokenException.TOKEN_ERROR.UNACCEPT);

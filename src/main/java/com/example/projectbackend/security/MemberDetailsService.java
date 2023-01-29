@@ -28,10 +28,11 @@ public class MemberDetailsService implements UserDetailsService {
                 .name(member.getName())
                 .phone(member.getPhone())
                 .address(member.getPhone())
-                .uuid(member.getUuid())
                 .fileName(member.getFileName())
                 .fromSocial(member.isFromSocial())
                 .roleSet(member.getRoleSet())
+                .regDate(member.getRegDate())
+                .modDate(member.getModDate())
                 .build();
         return memberDTO;
     }

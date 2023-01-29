@@ -68,12 +68,15 @@ public class ProductServiceImpl implements ProductService {
 
         product.clearImages();
 
-        if(productDTO.getFileNames() != null) {
-            for(String fileName : productDTO.getFileNames()) {
-                String[] arr = fileName.split("_");
-                product.addImage(arr[0]);
-            }
+        if (productDTO.getFileNames().size() > 0) {
+            productDTO.getFileNames().forEach(fileName -> {
+                product.addImage(fileName);
+            });
         }
+        if (productDTO.getFileNames().size() == 0) {
+            product.addImage("/img/noImage.jpg");
+        }
+
         System.out.println("수정 완료");
         productRepository.save(product);
     }

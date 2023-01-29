@@ -23,6 +23,17 @@ public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
 
     @Override
+    public Long create(ReviewDTO reviewDTO) {
+        Review review = dtoToEntity(reviewDTO);
+        return reviewRepository.save(review).getReviewNo();
+    }
+
+    @Override
+    public void delete(Long reviewNo) {
+        reviewRepository.deleteById(reviewNo);
+    }
+
+    @Override
     public PageResponseDTO<ReviewDTO> getReviewsByPid(Long pid, PageRequestDTO pageRequestDTO) {
 
         Pageable pageable = PageRequest.of(pageRequestDTO.getPage() <= 0 ? 0 : pageRequestDTO.getPage() - 1, pageRequestDTO.getSize(), Sort.by("reviewNo").descending());

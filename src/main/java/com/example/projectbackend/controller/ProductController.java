@@ -24,7 +24,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.readWithReviewAvg(pid));
     }
     @PostMapping("/authentication/create")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> create(@RequestBody ProductDTO productDTO) {
         System.out.println("등록 시작");
         System.out.println(productDTO);
@@ -38,14 +38,14 @@ public class ProductController {
         }
     }
     @DeleteMapping("/authentication/{pid}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> delete(@PathVariable Long pid) {
         System.out.println("삭제 시작");
         productService.delete(pid);
         return ResponseEntity.ok("Delete Success");
     }
     @PutMapping("/authentication/{pid}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> modify(@RequestBody ProductDTO productDTO) {
         System.out.println("수정 시작");
         System.out.println(productDTO);

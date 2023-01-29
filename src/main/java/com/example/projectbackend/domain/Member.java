@@ -26,7 +26,6 @@ public class Member extends BaseEntity {
     @ElementCollection
     private Set<MemberRole> roleSet = new HashSet<>();
     private boolean fromSocial;
-    private String uuid;
     private String fileName;
 
     public void changePassword(String pw) {
@@ -44,8 +43,7 @@ public class Member extends BaseEntity {
     public void changeFromSocial(boolean fromSocial) {
         this.fromSocial = fromSocial;
     }
-    public void changeImage(String uuid, String fileName) {
-        this.uuid = uuid;
+    public void changeImage(String fileName) {
         this.fileName = fileName;
     }
 

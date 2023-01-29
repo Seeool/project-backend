@@ -22,8 +22,9 @@ public interface MemberService {
                 .address(member.getAddress())
                 .roleSet(member.getRoleSet())
                 .fromSocial(member.isFromSocial())
-                .uuid(member.getUuid())
                 .fileName(member.getFileName())
+                .regDate(member.getRegDate())
+                .modDate(member.getModDate())
                 .build();
     }
 }
