@@ -50,6 +50,7 @@ public class MemberServiceImpl implements MemberService {
                 .email(memberJoinDTO.getEmail())
                 .address(memberJoinDTO.getAddress())
                 .phone(memberJoinDTO.getPhone())
+                .fileName("/img/member/base.png")
                 .fromSocial(false)
                 .build();
         member.addRole(MemberRole.USER);

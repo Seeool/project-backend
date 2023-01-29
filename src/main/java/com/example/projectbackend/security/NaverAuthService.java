@@ -8,6 +8,7 @@ import com.example.projectbackend.repository.MemberRepository;
 import com.example.projectbackend.util.JWTUtil;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,9 +25,10 @@ public class NaverAuthService {
     private final MemberRepository memberRepository;
     private final PasswordEncoderConfig passwordEncoderConfig;
     private final JWTUtil jwtUtil;
-    String ClientId = "i2_7EYkt09VVqubpvX6_";
+    @Value("${com.example.naver.clientId}")
+    String ClientId;
+    @Value("${com.example.naver.clientSecret}")
     String ClientSecret = "uk4xLGCl1K";
-    String RedirectUri = "http://localhost:3000/oauth";
 
 
     public String getNaverAccessToken(String code) {

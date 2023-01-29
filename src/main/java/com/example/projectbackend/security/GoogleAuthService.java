@@ -7,6 +7,7 @@ import com.example.projectbackend.repository.MemberRepository;
 import com.example.projectbackend.util.JWTUtil;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -22,9 +23,12 @@ public class GoogleAuthService {
     private final MemberRepository memberRepository;
     private final PasswordEncoderConfig passwordEncoderConfig;
     private final JWTUtil jwtUtil;
-    String ClientId = "869246748275-r4btnesji7e35cl7a8d1e0094c5so2ag.apps.googleusercontent.com";
-    String ClientSecret = "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";
-    String RedirectUri = "http://localhost:3000/oauthGoogle";
+    @Value("${com.example.google.clientId}")
+    String ClientId;
+    @Value("${com.example.google.clientSecret}")
+    String ClientSecret;
+    @Value("${com.example.google.redirectUri}")
+    String RedirectUri;
 
     public String getGoogleAccessToken(String code) {
         RestTemplate rt = new RestTemplate();

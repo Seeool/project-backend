@@ -7,6 +7,7 @@ import com.example.projectbackend.repository.MemberRepository;
 import com.example.projectbackend.util.JWTUtil;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -22,9 +23,10 @@ public class KakaoAuthService {
     private final MemberRepository memberRepository;
     private final PasswordEncoderConfig passwordEncoderConfig;
     private final JWTUtil jwtUtil;
-
-    String ClientId = "2bd4815fa725762dad388c9d643e396f";
-    String RedirectUri = "http://localhost:3000/oauthKakao";
+    @Value("${com.example.kakao.clientId}")
+    String ClientId;
+    @Value("${com.example.kakao.redirectUri}")
+    String RedirectUri;
 
     public String getKakaoAccessToken(String code) {
         RestTemplate rt = new RestTemplate();
