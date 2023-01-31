@@ -7,6 +7,7 @@ import com.example.projectbackend.dto.PageResponseDTO;
 import com.example.projectbackend.dto.ProductDTO;
 import com.example.projectbackend.dto.ProductWithReviewAvgDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -83,7 +84,7 @@ public interface ProductService {
         return productDTO;
     }
 
-    default ProductWithReviewAvgDTO objectsToDTO(Product product, Double reviewAvg) {
+    default ProductWithReviewAvgDTO objectsToDTO(Product product, ProductImage productImage, Double reviewAvg) {
         ProductWithReviewAvgDTO productWithReviewAvgDTO = ProductWithReviewAvgDTO.builder()
                 .pid(product.getPid())
                 .category(product.getCategory())
@@ -101,8 +102,13 @@ public interface ProductService {
                 .reviewAvg(reviewAvg)
                 .build();
 
-        List<String> fileNames = product.getImageSet().stream().sorted().map(productImage ->
-                productImage.getFileName()).collect(Collectors.toList());
+//        List<String> fileNames = product.getImageSet().stream().sorted().map(productImage ->
+//                productImage.getFileName()).collect(Collectors.toList());
+        System.out.println(productImage);
+        
+        List<String> fileNames = new ArrayList<>();
+        fileNames.add(productImage.getFileName());
+        System.out.println(fileNames);
         productWithReviewAvgDTO.setFileNames(fileNames);
 
         return productWithReviewAvgDTO;

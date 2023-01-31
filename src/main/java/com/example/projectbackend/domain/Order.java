@@ -17,5 +17,8 @@ public class Order extends BaseEntity {
     private Member member;
     @ManyToOne
     private Product product;
+    private String name;
+    private String phone;
+    private String address;
     private int Qty;
 }

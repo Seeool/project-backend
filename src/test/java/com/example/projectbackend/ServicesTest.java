@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @SpringBootTest
 public class ServicesTest {
@@ -55,6 +56,12 @@ public class ServicesTest {
     void readwithreviewRep() {
         ProductWithReviewAvgDTO productWithReviewAvgDTO = productService.readWithReviewAvg(1L);
         System.out.println(productWithReviewAvgDTO);
+    }
+
+    @Test
+    void getTopreatedFlist() {
+        List<ProductWithReviewAvgDTO> result = productService.getOrderByReviewAvgDescList();
+        result.stream().forEach(System.out::println);
     }
 
 //    @Test

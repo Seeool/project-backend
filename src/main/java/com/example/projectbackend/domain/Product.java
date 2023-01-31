@@ -82,6 +82,7 @@ public class Product extends BaseEntity {
 
     public void clearImages() {
         imageSet.forEach(productImage -> productImage.changeProduct(null));
+        this.imageSet.clear();
     }
 
 

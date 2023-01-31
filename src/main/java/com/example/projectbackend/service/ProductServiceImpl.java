@@ -105,8 +105,9 @@ public class ProductServiceImpl implements ProductService {
         List<Object[]> result = productRepository.findFirst6ByOrderByReviewAvgDesc();
         return result.stream().map(objects -> {
             Product product = (Product) objects[0];
-            Double reviewAvg = (Double) objects[1];
-            return objectsToDTO(product, reviewAvg);
+            ProductImage productImage = (ProductImage) objects[1];
+            Double reviewAvg = (Double) objects[2];
+            return objectsToDTO(product, productImage ,reviewAvg);
         }).collect(Collectors.toList());
     }
 
