@@ -16,19 +16,15 @@ import java.util.Objects;
 import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long>, ProductSearch {
-    @EntityGraph(attributePaths = "imageSet")
     List<Product> findFirst6ByOrderByRegDateDesc();
     //등록 최신순으로 6상품 찾기
 
-    @EntityGraph(attributePaths = "imageSet")
     List<Product> findByCategoryIs(int category);
     //특정 카테고리 상품 찾기
 
-    @EntityGraph(attributePaths = "imageSet")
     List<Product> findByDiscountIs(boolean discount);
     //할인 중인 상품 찾기
 
-    @EntityGraph(attributePaths = "imageSet")
     List<Product> findByDiscountIsTrueAndCategoryIs(int category);
     //할인 중인 상품 중 특정 카테고리 상품 찾기
 
@@ -43,7 +39,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>, Product
             "limit 6")
     List<Object[]> findFirst6ByOrderByReviewAvgDesc();
 
-    @EntityGraph(attributePaths = "imageSet")
     List<Product> findFirst12ByOrderBySalesVolumeDesc();
     //판매량(인기)가 많은 순으로 12상품 찾기
 
