@@ -43,6 +43,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, Product
             "limit 6")
     List<Object[]> findFirst6ByOrderByReviewAvgDesc();
 
+    @EntityGraph(attributePaths = "imageSet")
     List<Product> findFirst12ByOrderBySalesVolumeDesc();
     //판매량(인기)가 많은 순으로 12상품 찾기
 
