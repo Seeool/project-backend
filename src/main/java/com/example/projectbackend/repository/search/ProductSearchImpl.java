@@ -85,7 +85,7 @@ public class ProductSearchImpl extends QuerydslRepositorySupport implements Prod
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
         if(!category.isEmpty()) {
-            booleanBuilder.or(product.category.eq(Integer.parseInt(category)));
+            booleanBuilder.and(product.category.eq(Integer.parseInt(category)));
         }
 
         booleanBuilder.and(product.name.contains(keyword));
