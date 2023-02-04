@@ -1,15 +1,17 @@
 package com.example.projectbackend.repository.search;
 
-import com.example.projectbackend.domain.Product;
-import com.example.projectbackend.domain.QProduct;
+import com.example.projectbackend.domain.*;
+import com.example.projectbackend.dto.BlogWithReplyCountDTO;
 import com.example.projectbackend.dto.ProductDTO;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.Tuple;
 import com.querydsl.jpa.JPQLQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -81,20 +83,24 @@ public class ProductSearchImpl extends QuerydslRepositorySupport implements Prod
     public Page<ProductDTO> searchProductPaging(String category, String keyword, Pageable pageable) {
         System.out.println("쿼리DSL페이징 시작");
         QProduct product = QProduct.product;
+        QProductImage productImage = QProductImage.productImage;
         JPQLQuery<Product> query = from(product);
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        query.leftJoin(productImage).on(productImage.product.eq(product)).groupBy(product);
 
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
         if(!category.isEmpty()) {
             booleanBuilder.and(product.category.eq(Integer.parseInt(category)));
         }
-
         booleanBuilder.and(product.name.contains(keyword));
-
         query.where(booleanBuilder);
-
         this.getQuerydsl().applyPagination(pageable, query);
 
-        List<ProductDTO> dtoList = query.fetch().stream().map(product1 -> {
+        JPQLQuery<Tuple> tupleJPQLQuery = query.select(product, productImage);
+        List<Tuple> tupleList = tupleJPQLQuery.fetch();
+
+        List<ProductDTO> dtoList = tupleList.stream().map(tuple -> {
+            Product product1 = tuple.get(product);
+            ProductImage productImage1 = tuple.get(productImage);
             ProductDTO productDTO = ProductDTO.builder()
                     .pid(product1.getPid())
                     .category(product1.getCategory())
@@ -110,14 +116,13 @@ public class ProductSearchImpl extends QuerydslRepositorySupport implements Prod
                     .regDate(product1.getRegDate())
                     .modDate(product1.getModDate())
                     .build();
-            List<String> fileNames = product1.getImageSet().stream().sorted().map(productImage ->
-                    productImage.getFileName()).collect(Collectors.toList());
+            List<String> fileNames = new ArrayList<>();
+            fileNames.add(productImage1.getFileName());
             productDTO.setFileNames(fileNames);
             return productDTO;
-        }).collect(Collectors.toList());
-
-
+        }).toList();
         long count = query.fetchCount();
+
 
         return new PageImpl<>(dtoList, pageable, count);
     }
