@@ -85,7 +85,12 @@ public class ProductSearchImpl extends QuerydslRepositorySupport implements Prod
         QProduct product = QProduct.product;
         QProductImage productImage = QProductImage.productImage;
         JPQLQuery<Product> query = from(product);
-        query.leftJoin(productImage).on(productImage.product.eq(product)).groupBy(product);
+        JPQLQuery<ProductImage> subQuery = from(productImage);
+        query.leftJoin(productImage)
+                .on(productImage.product.eq(product)
+                        .and(productImage.ord.eq(subQuery.select(productImage.ord.min())
+                                .where(productImage.product.eq(product)))))
+                .groupBy(product);
 
         BooleanBuilder booleanBuilder = new BooleanBuilder();
         if(!category.isEmpty()) {
