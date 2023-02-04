@@ -81,7 +81,6 @@ public class ProductSearchImpl extends QuerydslRepositorySupport implements Prod
 
     @Override
     public Page<ProductDTO> searchProductPaging(String category, String keyword, Pageable pageable) {
-        System.out.println("쿼리DSL페이징 시작");
         QProduct product = QProduct.product;
         QProductImage productImage = QProductImage.productImage;
         JPQLQuery<Product> query = from(product);
