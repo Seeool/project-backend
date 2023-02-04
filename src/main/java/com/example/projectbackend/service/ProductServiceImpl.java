@@ -10,7 +10,6 @@ import com.example.projectbackend.repository.ProductRepository;
 import com.example.projectbackend.repository.ReviewRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +27,6 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ReviewRepository reviewRepository;
-    private final ModelMapper modelMapper;
 
     @Override
     public Long create(ProductDTO productDTO) throws PidExistException {
